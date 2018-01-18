@@ -23,7 +23,22 @@ setup(
     description=DESCRIPTION,
     license="MIT",
     packages=find_packages(exclude=["tests"]),
-    long_description=read('README.md'),
+    long_description=read('README.rst'),
     url='https://github.com/bodekerscientific/snag',  # use the URL to the github repo
     download_url='https://github.com/bodekerscientific/snag/archive/{}.tar.gz'.format(VERSION),
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+
+        'Intended Audience :: Developers',
+        'Intended Audience :: Science/Research',
+        'Intended Audience :: System Administrators',
+
+        'License :: OSI Approved :: MIT License',
+
+        'Programming Language :: Python :: 2',
+
+        'Topic :: Scientific/Engineering',
+        'Topic :: Scientific/Engineering :: Atmospheric Science'
+    ],
+    keywords='namelist scm climate generator',
 )
