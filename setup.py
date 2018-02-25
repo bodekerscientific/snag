@@ -26,6 +26,13 @@ setup(
     long_description=read('README.rst'),
     url='https://github.com/bodekerscientific/snag',  # use the URL to the github repo
     download_url='https://github.com/bodekerscientific/snag/archive/{}.tar.gz'.format(VERSION),
+    install_requires=[
+        'pyyaml',
+        'six',
+        'f90nml>=0.23',
+        'netCDF4',
+        'numpy'
+    ],
     classifiers=[
         'Development Status :: 3 - Alpha',
 
