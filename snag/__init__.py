@@ -1,8 +1,7 @@
-__version__ = '0.0.2'
-
 import f90nml
 import yaml
 from six import string_types
+from snag.version import version as __version__
 
 DATA_SECTION = 'input'
 

@@ -2,13 +2,15 @@ import os
 
 from setuptools import setup, find_packages
 
-from snag import __version__
 
 PACKAGE_NAME = "snag"
-VERSION = __version__
 AUTHOR = "Jared Lewis"
 AUTHOR_EMAIL = "jared@bodekerscientific.com"
 DESCRIPTION = "Single column model Namelist Auto Generator"
+
+
+version = None
+exec(open('wrfconf/version.py').read())
 
 
 def read(fname):
@@ -17,7 +19,7 @@ def read(fname):
 
 setup(
     name=PACKAGE_NAME,
-    version=VERSION,
+    version=version,
     author=AUTHOR,
     author_email=AUTHOR_EMAIL,
     description=DESCRIPTION,
@@ -25,7 +27,7 @@ setup(
     packages=find_packages(exclude=["tests"]),
     long_description=read('README.rst'),
     url='https://github.com/bodekerscientific/snag',  # use the URL to the github repo
-    download_url='https://github.com/bodekerscientific/snag/archive/{}.tar.gz'.format(VERSION),
+    download_url='https://github.com/bodekerscientific/snag/archive/{}.tar.gz'.format(version),
     install_requires=[
         'pyyaml',
         'six',
