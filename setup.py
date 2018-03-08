@@ -31,7 +31,6 @@ setup(
     install_requires=[
         'pyyaml',
         'six',
-        'f90nml>=0.23',
         'netCDF4',
         'numpy'
     ],
