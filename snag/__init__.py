@@ -1,23 +1,23 @@
-import f90nml
+from collections import OrderedDict
+
 import yaml
 from six import string_types
-from snag.version import version as __version__
-
-DATA_SECTION = 'input'
 
 from snag.namelist import Namelist
+from snag.serialize import dump
+from snag.utils import merge_dicts
+from snag.version import version as __version__
 
 
-def create_namelist(output_fh, conf):
+def create_namelist(conf, stream=None):
     """
     Create a new SCM namelist file given a dictionary containing the
-    :param fh:
     :param conf: Dict-like object or a filename to a yaml file containing the configuration
+    :param stream: A stream like object for example an open file. If nothing is provided then a string containing the configuration is returned
     :return:
     """
+    snag_config = OrderedDict()
     if isinstance(conf, string_types):
         conf = yaml.load(conf)
 
-    loaded_conf = Namelist(conf)
-    nml = f90nml.Namelist(loaded_conf.as_dict())
-    nml.write(output_fh)
+    return dump(merge_dicts(snag_config, conf), stream)
