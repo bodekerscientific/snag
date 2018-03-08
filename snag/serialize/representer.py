@@ -8,7 +8,7 @@ class RepresenterError(Exception):
 
 
 class BaseRepresenter(object):
-    wrf_representers = {}
+    representers = {}
 
     def represent(self, section_name, data):
         node = self.represent_data(data)
@@ -16,16 +16,16 @@ class BaseRepresenter(object):
 
     def represent_data(self, data, **kwargs):
         data_types = type(data).__mro__
-        if data_types[0] in self.wrf_representers:
-            node = self.wrf_representers[data_types[0]](self, data, **kwargs)
+        if data_types[0] in self.representers:
+            node = self.representers[data_types[0]](self, data, **kwargs)
 
             return node
 
     @classmethod
     def add_representer(cls, data_type, representer):
-        if not 'wrf_representers' in cls.__dict__:
-            cls.wrf_representers = cls.wrf_representers.copy()
-        cls.wrf_representers[data_type] = representer
+        if not 'representers' in cls.__dict__:
+            cls.representers = cls.representers.copy()
+        cls.representers[data_type] = representer
 
     def represent_scalar(self, value):
         node = ScalarNode(value, end_mark=',')

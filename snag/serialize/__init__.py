@@ -12,7 +12,7 @@ class Dumper(Serializer, Representer):
 
 def dump(data, stream=None, Dumper=Dumper):
     """
-    Serialize Python objects into a WRF namelist stream
+    Serialize Python objects into a namelist stream
     :param data:
     :param stream:
     :return:

@@ -10,7 +10,7 @@ DESCRIPTION = "Single column model Namelist Auto Generator"
 
 
 version = None
-exec(open('wrfconf/version.py').read())
+exec(open('snag/version.py').read())
 
 
 def read(fname):
