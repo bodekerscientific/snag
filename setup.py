@@ -49,4 +49,8 @@ setup(
         'Topic :: Scientific/Engineering :: Atmospheric Science'
     ],
     keywords='namelist scm climate generator',
+    entry_points={
+        'console_scripts':
+            ['snag = snag.cli:main']
+    },
 )
