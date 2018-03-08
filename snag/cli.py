@@ -9,7 +9,7 @@ def run_command(args):
         try:
             fh = open(args.output, 'w')
         except IOError:
-            print ('Error: could not open file {} for writing'.format(args.output))
+            print('Error: could not open file {} for writing'.format(args.output))
             exit(1)
     res = create_namelist(args.input, stream=fh)
 
@@ -22,10 +22,11 @@ def main():
                                      description="Generate configuration files for the UM SCM from structured YAML files")
 
     parser.add_argument('-o', '--output', help='filename for')
-    parser.add_argument('input', required=True, help='Input YAML file containing the configuration')
+    parser.add_argument('input', help='Input YAML file containing the configuration')
 
     args = parser.parse_args()
     run_command(args)
+
 
 if __name__ == '__main__':
     main()

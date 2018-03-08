@@ -42,7 +42,6 @@ RUNDATA:
     filename: ozone.nc
     variable_name: O3
 
-
 LOGIC:
 # ancyc:              true
   altdat:             false
@@ -63,25 +62,22 @@ LOGIC:
 
 INJULES:
   gs:          0.0161874815822
-  rgrain:      9*50.0
+  rgrain:      [9*50.0]
   smi_opt:      0
   smcli:      [34.3100004242361, 85.7749997824430, 223.014991254210, 686.199998259544]
   frac_typ:    [2*0.0, 1.00, 6*0.0]
-  canht:       2*0.0, 1.50, 2*0.0  # This gives us z0m = 0.15 for grass
+  canht:       [2*0.0, 1.50, 2*0.0]  # This gives us z0m = 0.15 for grass
   catch:       [2*0.0, 1.12999999523163, 6*0.0]
   snow_tile:   [9*0.0]
   lai:         [5*2.0]
-  z0_tile:     9*0.15 # this is ignored and overwritten by JULES for veg types
-  canopy:      9*0.0
-  infil_tile:  2*0.0, 8.249999955296516e-3, 6*0.0
-  tstar_tile:  9*300.149993896484
-
+  z0_tile:     [9*0.15] # this is ignored and overwritten by JULES for veg types
+  canopy:      [9*0.0]
+  infil_tile:  [2*0.0, 8.249999955296516e-3, 6*0.0]
+  tstar_tile:  [9*300.149993896484]
 
 INGWD:
 
 INPROF:
-
-
 
 DIAGS:
  strm_format(1):      4
@@ -102,7 +98,7 @@ DIAGS:
  l_SCMDiag_surf:   true
  l_SCMDiag_sea:    true
  l_SCMDiag_land:   false
- l_SCMDiag_convss: true,
+ l_SCMDiag_convss: true
 
 
 PHYSWITCH:

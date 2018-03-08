@@ -1,8 +1,8 @@
 import netCDF4 as nc
 import numpy as np
 
-from jc_scripts.dsc_scm.vertical_interp import vert_interp
-from snag import DATA_SECTION
+#from jc_scripts.dsc_scm.vertical_interp import vert_interp
+#from snag import DATA_SECTION
 
 
 def load_from_nc(conf):

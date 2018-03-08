@@ -18,6 +18,6 @@ def create_namelist(conf, stream=None):
     """
     snag_config = OrderedDict()
     if isinstance(conf, string_types):
-        conf = yaml.load(conf)
+        conf = yaml.load(open(conf))
 
     return dump(merge_dicts(snag_config, conf), stream)
