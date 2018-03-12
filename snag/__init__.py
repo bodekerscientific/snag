@@ -16,8 +16,9 @@ def create_namelist(conf, stream=None):
     :param stream: A stream like object for example an open file. If nothing is provided then a string containing the configuration is returned
     :return:
     """
-    snag_config = OrderedDict()
     if isinstance(conf, string_types):
         conf = yaml.load(open(conf))
 
-    return dump(merge_dicts(snag_config, conf), stream)
+    nl = Namelist(conf)
+
+    return dump(nl.as_dict(), stream)

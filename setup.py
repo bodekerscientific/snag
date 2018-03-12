@@ -32,7 +32,8 @@ setup(
         'pyyaml',
         'six',
         'netCDF4',
-        'numpy'
+        'numpy',
+        'xarray'
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',

@@ -1,7 +1,7 @@
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 
 from snag.forcing import forcings
-from snag.grid import GriddedVariable
+from snag.grid import GriddedVariable, DATA_SECTION
 
 DEFAULT_NAMELIST_SECTIONS = [
     'CNTLSCM',
@@ -19,7 +19,7 @@ DEFAULT_NAMELIST_SECTIONS = [
 ]
 
 VARIABLES = [
-    't', 'q', 'u', 'v', 'w'
+    'q', 'u', 'v', 'w', 'ozone'
 ]
 
 COORD_VARIABLES = [
@@ -47,7 +47,7 @@ class Namelist(object):
             try:
                 self.variables[v] = GriddedVariable.from_scm_conf(v, conf)
             except KeyError:
-                raise ValidationError('Could not parse data sources for variable {}'.format(v))
+                raise ValidationError('Could not parse data sources for variable {}. Check \'{}\' section'.format(v, DATA_SECTION))
 
         # Instantiate the forcings
         self.forcings = {}
@@ -70,7 +70,7 @@ class Namelist(object):
         :return: Dict
         """
 
-        conf = defaultdict(dict)
+        snag_config = OrderedDict()
 
         # create the initial conditions
         for v in ('u', 'v', 'w', 'theta'):

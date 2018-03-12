@@ -1,14 +1,19 @@
 import netCDF4 as nc
 import numpy as np
 
-#from jc_scripts.dsc_scm.vertical_interp import vert_interp
-#from snag import DATA_SECTION
+from snag.vertical_interp import vert_interp, calc_tendencies, model_levels_nml
+from snag.utils import extract_vars, to_np
 
 
-def load_from_nc(conf):
+DATA_SECTION = 'data'
+
+
+def load_from_nc(var, conf):
     ds = nc.Dataset(conf['filename'])
+    conf.setdefault('scale_factor', 1.0)
+    conf.setdefault('variable', var)
 
-    return ds.variables[conf['var_name']]
+    return extract_vars(ds, conf['variable'], scale_factor=conf['scale_factor'])
 
 
 class GriddedVariable(object):
@@ -21,21 +26,23 @@ class GriddedVariable(object):
     def __init__(self, var_name):
         self.var_name = var_name
         self._data = None
+        self._levels = None
+        self._dts = None
 
     def set_data(self, data):
-        self._data = self._vertical_interpolation(data)
+        self._levels, self._data = self._vertical_interpolation(data)
+        self._dts = data.coords['time']
 
     def _vertical_interpolation(self, data):
         # Pass through to call Jono's script
-
-        return vert_interp(data, self.var_name, range(len(data)))
+        return vert_interp(to_np(data), self.var_name, to_np(data.coords['height']))
 
     def as_tendencies(self):
         """
         Calculate tendencies from the raw_data
         :return: A numpy array
         """
-        return None
+        return calc_tendencies(self._data, self._dts)
 
     @classmethod
     def from_scm_conf(cls, var, conf):
@@ -47,7 +54,7 @@ class GriddedVariable(object):
             if 'filename' not in var_conf:
                 raise ValueError('filename for not specified for {} data'.format(var))
 
-            data = load_from_nc(var_conf)
+            data = load_from_nc(var, var_conf)
 
         n = cls(var)
         n.set_data(data)

@@ -3,6 +3,24 @@ meta:
   run_name: example_run
   owner: Jared Lewis <jared@bodekerscientific.com>
 
+data:
+  p:
+    filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/awrgriddedsondeM1.c0.20160125.000030.nc
+    variable: bar_press
+    scale_factor: 0.001
+
+  q:
+    filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/awrgriddedsondeM1.c0.20160125.000030.nc
+    variable: rh
+
+  u:
+    filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/awrgriddedsondeM1.c0.20160125.000030.nc
+    variable: u_wind
+
+  v:
+    filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/awrgriddedsondeM1.c0.20160125.000030.nc
+    variable: v_wind
+
 CNTLSCM:
  l_netcdf_obs: false
  l_ts_log: false
