@@ -94,7 +94,7 @@ def vert_interp(inp_array, var_name, inp_vert_levels):
     if var_name == 'p':
         inp_array = np.log(inp_array)  # convert to log pressure for interpolation
         out_levels = np.concatenate(eta_rho_nml, 1.0) * z_tom_nml  # model top added
-    elif var_name == 'theta' or var_name == 'q':
+    elif var_name in ['theta', 'q', 'ozone']:  # TODO: check which grid to regrid ozone to
         out_levels = eta_th_nml[1:] * z_tom_nml  # surface not included
     elif var_name == 'w':
         out_levels = eta_th_nml * z_tom_nml

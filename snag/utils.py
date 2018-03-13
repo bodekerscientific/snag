@@ -3,7 +3,7 @@ from collections import OrderedDict
 import numpy as np
 from netCDF4 import num2date
 from xarray import DataArray
-
+from cf_units import Unit
 
 def merge_dicts(a, b):
     """
@@ -50,7 +50,7 @@ def extract_times(nc_file, time_idx):
     return outarr
 
 
-def extract_vars(nc_file, var_name, time_idx=None, scale_factor=1.0):
+def extract_vars(nc_file, var_name, time_idx=None, target_units=None):
     """
     Return a :class:`xarray.DataArray` object for the desired variable in a single NetCDF file object.
 
@@ -60,6 +60,7 @@ def extract_vars(nc_file, var_name, time_idx=None, scale_factor=1.0):
     :param var_name: (:obj:`str`) The variable name.
     :param time_idx: (:obj:`int` or :data:`wrf.ALL_TIMES`, optional): The desired time index. This value can be a positive integer, negative integer,
             or None to return all times in the file or sequence. The default is None (return all idxs).
+    :param  target_units: (:obj:`str`) If not None, attempt to convert units to this format using cf_units.
     :returns: :class:`xarray.DataArray`:  An array object that contains metadata.
 
     """
@@ -71,8 +72,9 @@ def extract_vars(nc_file, var_name, time_idx=None, scale_factor=1.0):
     else:
         data = var[time_idx_or_slice]
 
-    # multiply the data by a scale factor. Defaults to 1.0
-    data *= scale_factor
+    if target_units is not None and hasattr(var, 'units'):
+        u = Unit(var.units)
+        data = u.convert(data, target_units)
 
     # Want to preserve the time dimension
     if not multitime:
@@ -102,7 +104,7 @@ def extract_vars(nc_file, var_name, time_idx=None, scale_factor=1.0):
         coords[dimnames[0]] = t
 
     if len(dimnames) == 2 and dimnames[1] == 'height': #TODO: Make generic
-        t = extract_vars(nc_file, 'height', slice(None))
+        t = extract_vars(nc_file, 'height', slice(None), target_units='m')
         coords['height'] = t
 
     data_array = DataArray(data, name=nc_file, dims=dimnames, coords=coords, attrs=attrs)

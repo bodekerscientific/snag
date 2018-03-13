@@ -7,13 +7,21 @@ from snag.utils import extract_vars, to_np
 
 DATA_SECTION = 'data'
 
+units = {
+    'p': 'hPa',
+}
+
 
 def load_from_nc(var, conf):
     ds = nc.Dataset(conf['filename'])
     conf.setdefault('scale_factor', 1.0)
     conf.setdefault('variable', var)
 
-    return extract_vars(ds, conf['variable'], scale_factor=conf['scale_factor'])
+    u = None
+    if var in units:
+        u = units[var]
+
+    return extract_vars(ds, conf['variable'], target_units=u)
 
 
 class GriddedVariable(object):

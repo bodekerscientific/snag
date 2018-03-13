@@ -29,6 +29,7 @@ setup(
     url='https://github.com/bodekerscientific/snag',  # use the URL to the github repo
     download_url='https://github.com/bodekerscientific/snag/archive/{}.tar.gz'.format(version),
     install_requires=[
+        'cf_units',
         'pyyaml',
         'six',
         'netCDF4',
@@ -45,6 +46,7 @@ setup(
         'License :: OSI Approved :: MIT License',
 
         'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 3',
 
         'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: Atmospheric Science'
