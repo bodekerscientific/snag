@@ -56,7 +56,15 @@ eta_rho_nml = np.array([0.1176471E-03, 0.4313726E-03, 0.9019608E-03, 0.1529412E-
 
 # heights are given by eta * z_tom_nml. i.e. first eta_rho_nml = 0.1176471E-03 *85,000 = 10 m
 
-def vert_interp(inp_array, var_name, inp_vert_levels):
+VERTICAL_GRIDS = [
+    'theta',
+    'theta_without_surf',
+    'rho',
+    'rho_with_model_top'
+]
+
+
+def vert_interp(inp_array, var_name, inp_vert_levels, vertical_grid):
     """
     interpolate the input data to the staggered vertical levels required for the single column model.
 
@@ -93,15 +101,17 @@ def vert_interp(inp_array, var_name, inp_vert_levels):
     # set vertical levels needed.
     if var_name == 'p':
         inp_array = np.log(inp_array)  # convert to log pressure for interpolation
-        out_levels = np.concatenate(eta_rho_nml, 1.0) * z_tom_nml  # model top added
-    elif var_name in ['theta', 'q', 'ozone']:  # TODO: check which grid to regrid ozone to
-        out_levels = eta_th_nml[1:] * z_tom_nml  # surface not included
-    elif var_name == 'w':
-        out_levels = eta_th_nml * z_tom_nml
-    elif var_name == 'u' or var_name == 'v':
+
+    if vertical_grid == 'rho':
         out_levels = eta_rho_nml * z_tom_nml
+    elif vertical_grid == 'rho_with_model_top':
+        out_levels = np.concatenate((eta_rho_nml, [1.0])) * z_tom_nml
+    elif vertical_grid == 'theta':
+        out_levels = eta_th_nml * z_tom_nml
+    elif vertical_grid == 'theta_without_surf':
+        out_levels = eta_th_nml[1:] * z_tom_nml
     else:
-        raise ValueError('input variable not known')
+        raise ValueError('Unknown vertical grid: {}'.format(vertical_grid))
 
     out_array = np.empty((num_inp_timesteps, len(out_levels)))
 
@@ -111,7 +121,7 @@ def vert_interp(inp_array, var_name, inp_vert_levels):
         for i in range(num_inp_timesteps):
             out_array[i, :] = np.interp(out_levels, inp_vert_levels, inp_array[i, :])
 
-    if var_name == 'p_in':  # convert back from log pressure
+    if var_name == 'p':  # convert back from log pressure
         out_array = np.exp(out_array)
 
     return out_levels, out_array

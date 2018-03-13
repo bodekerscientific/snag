@@ -66,7 +66,10 @@ def extract_vars(nc_file, var_name, time_idx=None, target_units=None):
     """
     multitime = is_multi_time(time_idx)
     time_idx_or_slice = time_idx if not multitime else slice(None)
-    var = nc_file.variables[var_name]
+    try:
+        var = nc_file.variables[var_name]
+    except KeyError:
+        raise ValueError('No variable named {} available in {}'.format(var_name, nc_file.filepath())) # TODO: refactor to ValidationError
     if len(var.shape) > 1:
         data = var[time_idx_or_slice, :]
     else:
@@ -148,3 +151,7 @@ def to_np(arr):
         result.set_fill_value(fill_value)
 
     return result
+
+
+def calc_potential_temp(temp, press):
+    return temp * np.power(1000.0 / press, 0.286)

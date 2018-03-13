@@ -51,3 +51,11 @@ class TestGriddedVariableFromConf(TestCase):
             }
         }
         self.assertRaises(ValueError, GriddedVariable.from_scm_conf, 'p', conf)
+
+    def test_not_required(self):
+        conf = {
+            'data': {
+            }
+        }
+        self.assertIsNone(GriddedVariable.from_scm_conf('theta', conf))
+        self.assertRaises(KeyError, GriddedVariable.from_scm_conf, 'p', conf)

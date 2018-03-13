@@ -1,7 +1,7 @@
 from collections import defaultdict, OrderedDict
 
 from snag.forcing import forcings
-from snag.grid import GriddedVariable, DATA_SECTION
+from snag.grid import GriddedVariable, DATA_SECTION, VALID_VARIABLES
 
 DEFAULT_NAMELIST_SECTIONS = [
     'CNTLSCM',
@@ -16,14 +16,6 @@ DEFAULT_NAMELIST_SECTIONS = [
     'INGEOFOR',
     'RADCLOUD',
     'PHYSWITCH',
-]
-
-VARIABLES = [
-    'q', 'u', 'v', 'w', 'ozone'
-]
-
-COORD_VARIABLES = [
-    'p', 'theta'
 ]
 
 
@@ -43,11 +35,12 @@ class Namelist(object):
         """
         self._raw_conf = conf
         self.variables = {}
-        for v in VARIABLES + COORD_VARIABLES:
+        for v in VALID_VARIABLES:
             try:
                 self.variables[v] = GriddedVariable.from_scm_conf(v, conf)
             except KeyError:
                 raise ValidationError('Could not parse data source for variable {}. Check \'{}\' section'.format(v, DATA_SECTION))
+        self.variables['theta'] = GriddedVariable.calculate_theta(self.variables['p'], self.variables['t'],)
 
         # Instantiate the forcings
         self.forcings = {}
@@ -71,19 +64,21 @@ class Namelist(object):
         """
 
         snag_config = OrderedDict()
+        for sec in DEFAULT_NAMELIST_SECTIONS:
+            snag_config[sec] = OrderedDict()
 
         # create the initial conditions
         for v in ('u', 'v', 'w', 'theta'):
-            conf['INPROF']['{}i'.format(v)] = self.variables[v].initial_profile()
-        conf['INPROF']['p_in'] = self.variables['p'].initial_profile()
+            snag_config['INPROF']['{}i'.format(v)] = self.variables[v].initial_profile()
+        snag_config['INPROF']['p_in'] = self.variables['p'].initial_profile()
 
         # Process the forcings
         for forcing in self.forcings:
             forcing.get_params(self.variables)
 
-        # Override the configuration with the 'overrides' key. Note that the overridden configuration is not validated.
-        if 'overrides' in self._raw_conf:
-            for k in self._raw_conf['overrides']:
-                conf[k].update(self._raw_conf['overrides'][k])
+        # Override the configuration with the default sections. Note that the overridden configuration is not validated.
+        for k in DEFAULT_NAMELIST_SECTIONS:
+            if k in self._raw_conf and self._raw_conf[k] is not None:
+                snag_config[k].update(self._raw_conf[k])
 
-        return conf
+        return snag_config

@@ -21,7 +21,7 @@ data:
     variable: v_wind
   p:
     filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/awrinterpolatedsondeM1.c1.20160127.000030.nc
-    variable: bar_press
+    variable: bar_pres
   t:
     variable: temp
 
@@ -60,9 +60,6 @@ RUNDATA:
   tstar_sice:       302.70
   albsoil:          0.17000000179e+0
   dump_days:        [1,    90,   360,     0]
-  ozone:
-    filename: ozone.nc
-    variable_name: O3
 
 LOGIC:
 # ancyc:              true

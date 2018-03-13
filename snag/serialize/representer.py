@@ -16,10 +16,12 @@ class BaseRepresenter(object):
 
     def represent_data(self, data, **kwargs):
         data_types = type(data).__mro__
-        if data_types[0] in self.representers:
-            node = self.representers[data_types[0]](self, data, **kwargs)
+        for data_type in data_types:
+            if data_type in self.representers:
+                node = self.representers[data_type](self, data, **kwargs)
 
-            return node
+                return node
+        raise ValueError('Cannot represent class {} for value {}'.format(data_types, data))
 
     @classmethod
     def add_representer(cls, data_type, representer):
