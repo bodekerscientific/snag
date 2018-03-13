@@ -47,7 +47,7 @@ class Namelist(object):
             try:
                 self.variables[v] = GriddedVariable.from_scm_conf(v, conf)
             except KeyError:
-                raise ValidationError('Could not parse data sources for variable {}. Check \'{}\' section'.format(v, DATA_SECTION))
+                raise ValidationError('Could not parse data source for variable {}. Check \'{}\' section'.format(v, DATA_SECTION))
 
         # Instantiate the forcings
         self.forcings = {}

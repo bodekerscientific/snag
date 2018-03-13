@@ -4,22 +4,26 @@ meta:
   owner: Jared Lewis <jared@bodekerscientific.com>
 
 data:
-  p:
-    filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/awrgriddedsondeM1.c0.20160125.000030.nc
-    variable: bar_press
-    scale_factor: 0.001
-
+  filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/awrinterpolatedsondeM1.c1.20160127.000030.nc
   q:
-    filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/awrgriddedsondeM1.c0.20160125.000030.nc
     variable: rh
-
   u:
-    filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/awrgriddedsondeM1.c0.20160125.000030.nc
+    filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/awrinterpolatedsondeM1.c1.20160127.000030.nc
     variable: u_wind
-
   v:
-    filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/awrgriddedsondeM1.c0.20160125.000030.nc
+    filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/awrinterpolatedsondeM1.c1.20160127.000030.nc
     variable: v_wind
+  w:
+    filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/awrinterpolatedsondeM1.c1.20160127.000030.nc
+    variable: v_wind
+  ozone:
+    filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/awrinterpolatedsondeM1.c1.20160127.000030.nc
+    variable: v_wind
+  p:
+    filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/awrinterpolatedsondeM1.c1.20160127.000030.nc
+    variable: bar_press
+  t:
+    variable: temp
 
 CNTLSCM:
  l_netcdf_obs: false

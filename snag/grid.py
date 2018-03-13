@@ -52,7 +52,10 @@ class GriddedVariable(object):
             data = np.array(var_conf)
         else:
             if 'filename' not in var_conf:
-                raise ValueError('filename for not specified for {} data'.format(var))
+                if 'filename' in conf[DATA_SECTION]:
+                    var_conf['filename'] = conf[DATA_SECTION]['filename']
+                else:
+                    raise ValueError('filename for not specified for {} data'.format(var))
 
             data = load_from_nc(var, var_conf)
 
