@@ -8,19 +8,14 @@ data:
   q:
     variable: rh
   u:
-    filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/awrinterpolatedsondeM1.c1.20160127.000030.nc
     variable: u_wind
   v:
-    filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/awrinterpolatedsondeM1.c1.20160127.000030.nc
     variable: v_wind
   w:
-    filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/awrinterpolatedsondeM1.c1.20160127.000030.nc
     variable: v_wind
   ozone:
-    filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/awrinterpolatedsondeM1.c1.20160127.000030.nc
     variable: v_wind
   p:
-    filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/awrinterpolatedsondeM1.c1.20160127.000030.nc
     variable: bar_pres
   t:
     variable: temp
@@ -42,6 +37,7 @@ INDATA:
   salt_dim3:         85
   lat:                 -2.0
   long:               156.0
+  ozone: []
 # soil_type:       (land_points) * ?
 
 RUNDATA:

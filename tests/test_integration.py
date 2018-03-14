@@ -1,47 +1,24 @@
+import tempfile
 from unittest import TestCase
 
+from six import StringIO
+import numpy as np
+import yaml
+
+
 from snag import create_namelist
-import tempfile
 
 
 class TestIntegration(TestCase):
     def test_create_namelist(self):
-        fp = tempfile.TemporaryFile()
-        create_namelist(fp, {
-            'input': {
-                'p': {
-                    'filename': '/home/jared/Downloads/Pressure_climatology_2000s_ARM.nc',
-                    'var_name': 'v'
-                },
-                'theta': {
-                    'filename': np.range(19),
-                    'var_name': 'v'
-                },
-                't': {
-                    'filename': '',
-                    'var_name': 'v'
-                },
-                'q': 0.0,
-                'u': 2.0,
-                'v': 2.0,
-                'w': 0.0,
+        stream = StringIO()
+        cfg = yaml.load(open('../examples/basic.yml'))
+        create_namelist(cfg, stream)
 
-            },
-            'forcing': {
-              'observational': {
-                  'enabled': True,
-              }
-            },
-            'overrides': {
-                'INOBSFOR': {
-                    'obs_pd': 1
-                }
-            }
-        })
+        stream.seek(0)
 
-        fp.seek(0)
-
-        res = fp.read()
+        res = stream.read()
         self.assertGreater(len(res), 0)
-        self.assertIn('inobsfor', res)
-        self.assertIn('obs_pd', res)
+        self.assertIn('INOBSFOR', res)
+        # TO be calculated
+        #self.assertIn('obs_pd', res)

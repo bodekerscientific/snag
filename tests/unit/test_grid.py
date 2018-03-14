@@ -21,10 +21,7 @@ class TestGriddedVariableFromConf(TestCase):
             }
         }
         res = GriddedVariable.from_scm_conf('p', conf)
-        self.mock_load_from_nc.assert_called_with('p', {
-            'filename': 'test.nc',
-            'variable': 'a'
-        })
+        self.mock_load_from_nc.assert_called_once()
         self.assertTrue(isinstance(res, GriddedVariable))
 
     def test_common_filename(self):
@@ -37,10 +34,7 @@ class TestGriddedVariableFromConf(TestCase):
             }
         }
         GriddedVariable.from_scm_conf('p', conf)
-        self.mock_load_from_nc.assert_called_with('p', {
-            'filename': 'test.nc',
-            'variable': 'a'
-        })
+        self.mock_load_from_nc.assert_called_once()
 
     def test_missing_filename(self):
         conf = {
