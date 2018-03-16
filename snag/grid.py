@@ -10,7 +10,7 @@ DATA_SECTION = 'data'
 VARIABLE_DEFAULTS = {
     'p': {
         'grid': 'rho_with_model_top',
-        'units': 'hPa'
+        'units': 'Pa'
     },
     't': {
         'grid': 'theta_without_surf',
@@ -18,6 +18,7 @@ VARIABLE_DEFAULTS = {
     },
     'q': {
         'grid': 'theta_without_surf',
+        'units': 'kg/kg'
     },
     'u': {
         'grid': 'rho',
@@ -33,6 +34,7 @@ VARIABLE_DEFAULTS = {
     },
     'ozone': {
         'grid': 'theta_without_surf',
+        'units': 'kg/kg'
     },
     'theta': {
         'grid': 'theta_without_surf',
@@ -121,7 +123,7 @@ class GriddedVariable(object):
     def calculate_theta(cls, press, temp):
         # Regrid press to temp vertical levels
         levels, press_regridded = vert_interp(press.data, 'p', press.levels, temp.config['grid'])
-        theta = temp.data * np.power(1000.0 / press_regridded, 0.286)
+        theta = temp.data * np.power(100000.0 / press_regridded, 0.286) # pressure in Pa
 
         # Load up the GriddedVariable instance
         n = cls('theta')

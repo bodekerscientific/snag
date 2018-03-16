@@ -4,9 +4,9 @@ meta:
   owner: Jared Lewis <jared@bodekerscientific.com>
 
 data:
-  filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/awrinterpolatedsondeM1.c1.20160127.000030.nc
+  filename: P:/Projects/DSC-SCM/sonde data/awrinterpolatedsondeM1.c1.20160127.000030.nc
   q:
-    variable: rh
+    variable: sh
   u:
     variable: u_wind
   v:
@@ -14,7 +14,7 @@ data:
   w:
     variable: v_wind
   ozone:
-    variable: v_wind
+    variable: sh
   p:
     variable: bar_pres
   t:

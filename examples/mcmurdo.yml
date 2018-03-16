@@ -1,0 +1,159 @@
+---
+meta:
+  run_name: example_run_mcmurdo
+  owner: Jono Conway <jono@bodekerscientific.com>
+
+data:
+  filename: P:/Projects/DSC-SCM/sonde data/Blended_ARM_data_jan24_short.nc
+  #
+  #awrinterpolatedsondeM1.c1.20160124.000030
+  p:
+    variable: pres
+  t:
+    variable: temp
+  q:
+    variable: sh
+  u:
+    variable: u_wind
+  v:
+    variable: v_wind
+  w:
+    variable: v_wind
+  ozone:
+    #filename: P:/Projects/DSC-SCM/from Laura/Ozone_climatology_2000s_ARM.nc
+    variable: sh
+
+CNTLSCM:
+ l_netcdf_obs: false # unsupported feature
+ l_ts_log: true # report model progress
+ model_levels_nml:   85 ## the number of levels in forcing grid - must match that in UM namelist file SIZES
+ land_points:        1 ## land point(1) or sea(0). for 1, land_sea_mask must be set to true, and for 0 land_sea_mask=false
+ nfor:               48 ## number of  observations in obs forcing
+
+INDATA:
+  year_init:          2016 ## set from forcing input data?
+  month_init:         1 ## set from forcing input data?
+  day_init:           9 ## set from forcing input data?
+  hour_init:          0 ## set from forcing input data?
+  min_init:           0 ## set from forcing input data?
+  sec_init:           0 ## set from forcing input data?
+  salt_dim3:          85 # not sure why the third sea salt aerosol dimension is 85, but it is the same in TOGACOARE and GABLS3
+  lat:                -2.0
+  long:               156.0
+  gridbox_area:    1.0e+6 # deault value from GABLS3 (1.0e+6)
+  soil_type:          3 ## only needed for land point. ice = 1 so match soil_mask and land_ice_mask??
+
+
+RUNDATA:
+  exname_in:       'ARM_MCMURDO' # it appears this is needed, though not sure for what
+  exname_out:      'ARM_MCMURDO'
+  ndayin:            1
+  nminin:             0
+  nsecin:             0
+  timestep:           1200 # both GABLS and TOGACOARE have 20 min timestep
+  ntrad1:             1 # first timestep in which radiation called
+  zh:               500.0 # height (above surface) of the top of boundary layer
+  ntml:           0 # model level of top of surface mixed layer (both GABLS and TOGACOARE use 0)
+  min_trop_level:   0 # 0 = calculate min/max tropopause level from climatologies
+  max_trop_level:   0 # 0 = calculate min/max tropopause level from climatologies
+  co2start:       5.420e-4  # CO2 mixing ratio in kg/kg
+  co2end:         5.420e-4
+  dolr_rts:       0.0  # TOA - surface upward longwave radiation 9(not entirely sure what this is)
+  orog:           -0.70 # orography height in m
+  albsoil:          0.23 # soil albedo
+  sice_alb:         0.7 # sea ice albedo
+  #land_alb:       = 0.5       # not needed if info given in JULES section
+  fland_ctile:     1.0     ## some logic # fraction land, must = 0 for land_points=0, or between 0 and 1 for land_points=1 (fraction of land (either ice or soil) and sea)
+  tstar_sea:       300.150 ## can be set from tstari - mean surface temperture
+  tstar_land:      300.150 ## can be set from tstari
+  tstar_sice:      300.150 ## can be set from tstari
+  albobs_sw:       0.125 # SW obs/clim albedo (SW)
+  albobs_vis:      0.075 # SW obs/clim albedo (VIS)
+  albobs_nir:      0.25 # SW obs/clim albedo (NIR)
+  ozone: []
+
+LOGIC:
+  ancyc:              true # default = true. Not sure why
+  altdat:             true # use specified initial profiles of theta,q,u and v from INPROF
+  land_sea_mask:      true ## land point(1) or sea point(0)  must match land_points
+  land_ice_mask:      false ## land ice point(1) or ice-free land point (0). mutually exclusive with soil_mask
+  soil_mask:          true ## land point with soil (1) or non-soil land_point. mutually exclusive with soil_mask
+  obs:                true ## use observational forcing for atmosphere
+  obs_surf:           true ## use observational forcing for surface (either fluxes or surface temperature)
+# stats:              false
+# noforce:            false
+# geoforce:           false
+# geoinit:            false
+  l_qpos_for:         true
+  l_spec_z0:          false # use prescribed roughness lengths (from INPROF for ocean and INJULES for land.
+  test:               false  # output deatiled sub-timestep diagnostics
+  local_time:         false  # use local, rather than GMT for diagnostics
+#  prindump_step:      true # see dump_days in RUNDATA
+#  prindump_day:       true
+#  grafdump_step:      true
+
+
+
+INJULES:
+  # fraction of each surface type (9 tiles)
+  frac_typ:    [0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  # soil moisture
+  smi_opt:      0 # 0 use smcli, 1 use fsmc, 2 use sth
+  smcli:      [34.31, 85.775, 223.015, 686.2] # initial soil moisture on same layers as t_deep_soili
+  # vegetation parameters for vegetation tiles (5)
+  canht:       [0.0, 0.0, 1.50, 0.0,0.0]  # This gives us z0m = 0.15 for grass
+  lai:         [2.0, 2.0, 2.0, 2.0, 2.0]
+  gs:          1 # stomatal conductance (single value) (GABLS3 = 0.0161874815822)
+  # other surface parameters for all tiles (9)
+  z0_tile:     [0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15] # tile roughness length (m). this is ignored and overwritten by JULES for veg types
+  tstar_tile:  [300.15, 300.15, 300.15, 300.15, 300.15, 300.15, 300.15, 300.15, 300.15] ## initial surface temperature of tiles initialised to tstari if not set
+  catch:       [0.0, 0.0, 1.13, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] # surface/canopy water capacity (snow-free land tiles)
+  canopy:      [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] # surface/canopy water (snow-free land tiles)
+  infil_tile:  [0.0, 0.0, 8.25e-3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] # maximum surface infiltration
+  snow_tile:   [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] # lying snow on tiles (kg/m^3)
+  rgrain:      [50.0, 50.0, 50.0, 50.0, 50.0, 50.0, 50.0, 50.0, 50.0] # snow grain size (micro m)
+
+
+INGWD:
+
+INPROF:
+# get profiles of theta, qi, p_in, ui, vi from files. wi and w_advi set to 0
+# as profiles are already on model levels, set
+  kill_interp:    true # input data already on model levels.
+  z0mseai:   1e-4, # initial sea surface roughness length (required if l_spec_z0 = true)
+  u_0:   0.0 # sea surface currents
+  v_0:   0.0 # sea surface currents
+  ice_fract:    0.0 # grid-box sea-ice fraction
+  di:  0.0 # initial equivalent sea-ice thickness
+  tstari:         268.15 ## initial surface temperature (get from surface temperature forcing)
+  i_snowdepth: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      # JULES lnd*tiles. if this specified, then need to add characteristic of each
+  smci: 0.0 # initial soil moisture content
+  canopy_gbi: 0.0 # initial canopy water content
+  t_deep_soili:  [294.15, 290.95, 287.82, 283.15] # inital deep soil temperature (one for each soil layer) - corresponds to smcli and/or sth
+
+  sil_orog_land:    0.0 # unresolved orography (land points only)
+  ho2r2_orog:   0.0 # unresolved orography (land points only)
+
+DIAGS:
+ strm_format(1):      4
+ strm_unit(1):        -1
+# strm_format(1):      3
+# strm_unit(1):        37
+ strm_dumpstep:       +1
+ strm_rejectlist(1):  ''
+ l_SCMDiag_gen:    true
+ l_SCMDiag_conv:   true
+ l_SCMDiag_rad:    true
+ l_SCMDiag_bl:     true
+ l_SCMDiag_lsp:    true
+ l_SCMDiag_lscld:  true
+ l_SCMDiag_forc:   true
+ l_SCMDiag_incs:   true
+ l_SCMDiag_pc2:    true
+ l_SCMDiag_surf:   true
+ l_SCMDiag_sea:    true
+ l_SCMDiag_land:   false
+ l_SCMDiag_convss: true
+
+
+PHYSWITCH:

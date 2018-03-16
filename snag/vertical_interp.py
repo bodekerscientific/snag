@@ -13,7 +13,7 @@ import numpy as np
 
 kill_interp = True  # disable auto-grid interpolation. Recommended set to True, as is bug in model. If kill_interp = True, the eta arrays are not actually used by the model, but are used to construct the input data
 model_levels_nml = 85  # if kill_interp=True, this should match model_levels in the UM namelist SIZES
-z_tom_nml = 85000.00  # if kill_interp=True, this should match z_top_of_model = 85000.00,
+z_tom_nml = 85000.0  # if kill_interp=True, this should match z_top_of_model = 85000.00,
 eta_th_nml = np.array([0.0000000E+00, 0.2352941E-03, 0.6274510E-03, 0.1176471E-02, 0.1882353E-02,
               0.2745098E-02, 0.3764706E-02, 0.4941176E-02, 0.6274510E-02, 0.7764705E-02,
               0.9411764E-02, 0.1121569E-01, 0.1317647E-01, 0.1529412E-01, 0.1756863E-01,

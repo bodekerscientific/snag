@@ -8,14 +8,15 @@ DEFAULT_NAMELIST_SECTIONS = [
     'INDATA',
     'RUNDATA',
     'NC_OBS',
-    'DIAGS',
     'LOGIC',
+    'INJULES',
     'INGWD',
     'INPROF',
-    'INOBSFOR',
     'INGEOFOR',
-    'RADCLOUD',
     'PHYSWITCH',
+    'RADCLOUD',
+    'INOBSFOR',
+    'DIAGS',
 ]
 
 
@@ -39,8 +40,9 @@ class Namelist(object):
             try:
                 self.variables[v] = GriddedVariable.from_scm_conf(v, conf)
             except KeyError:
-                raise ValidationError('Could not parse data source for variable {}. Check \'{}\' section'.format(v, DATA_SECTION))
-        self.variables['theta'] = GriddedVariable.calculate_theta(self.variables['p'], self.variables['t'],)
+                raise ValidationError(
+                    'Could not parse data source for variable {}. Check \'{}\' section'.format(v, DATA_SECTION))
+        self.variables['theta'] = GriddedVariable.calculate_theta(self.variables['p'], self.variables['t'], )
 
         # Instantiate the forcings
         self.forcings = {}
@@ -68,7 +70,7 @@ class Namelist(object):
             snag_config[sec] = OrderedDict()
 
         # create the initial conditions
-        for v in ('u', 'v', 'w', 'theta'):
+        for v in ('u', 'v', 'w', 'theta', 'q'):
             snag_config['INPROF']['{}i'.format(v)] = self.variables[v].initial_profile()
         snag_config['INPROF']['p_in'] = self.variables['p'].initial_profile()
 
