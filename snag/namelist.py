@@ -1,7 +1,8 @@
-from collections import defaultdict, OrderedDict
+from collections import OrderedDict
 
 from snag.forcing import forcings
 from snag.grid import GriddedVariable, DATA_SECTION, VALID_VARIABLES
+from snag.serialize import dump
 
 DEFAULT_NAMELIST_SECTIONS = [
     'CNTLSCM',
@@ -53,6 +54,12 @@ class Namelist(object):
                     self.forcings[f] = Forcing(conf['forcings'][f])
                 except KeyError:
                     raise ValueError('No such forcing named {}'.format(f))
+
+        self.config = self.as_dict()
+
+    def dump(self, stream):
+        self.validate()
+        return dump(self.config, stream)
 
     def validate(self):
         pass
