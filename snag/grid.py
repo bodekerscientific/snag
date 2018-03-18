@@ -50,8 +50,11 @@ def load_from_nc(var, conf):
     ds = nc.Dataset(conf['filename'])
     conf.setdefault('variable', var)
     conf.setdefault('units', None)
+    conf.setdefault('time_variable', 'time')
+    conf.setdefault('vertical_variable', 'height')
 
-    return extract_vars(ds, conf['variable'], target_units=conf['units'])
+    return extract_vars(ds, conf['variable'], target_units=conf['units'], time_variable=conf['time_variable'],
+                        vertical_variable=conf['vertical_variable'])
 
 
 class GriddedVariable(object):

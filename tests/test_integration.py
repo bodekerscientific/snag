@@ -12,7 +12,7 @@ from snag import create_namelist
 class TestIntegration(TestCase):
     def test_create_namelist(self):
         stream = StringIO()
-        cfg = yaml.load(open('../examples/basic.yml'))
+        cfg = yaml.load(open('test_conf.yml'))
         create_namelist(cfg, stream)
 
         stream.seek(0)
