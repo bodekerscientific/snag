@@ -57,7 +57,13 @@ class Namelist(object):
 
         self.config = self.as_dict()
 
-    def dump(self, stream):
+    def dump(self, stream=None):
+        """
+        Dump the namelist to a stream or string if not stream is provided
+
+        :param stream: A stream like object for example an open file. If nothing is provided then a string containing the configuration is returned
+        :return:
+        """
         self.validate()
         return dump(self.config, stream)
 

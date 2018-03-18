@@ -1,12 +1,10 @@
-import tempfile
 from unittest import TestCase
 
-from six import StringIO
-import numpy as np
 import yaml
-
+from six import StringIO
 
 from snag import create_namelist
+from snag.namelist import Namelist
 
 
 class TestIntegration(TestCase):
@@ -21,4 +19,13 @@ class TestIntegration(TestCase):
         self.assertGreater(len(res), 0)
         self.assertIn('INOBSFOR', res)
         # TO be calculated
-        #self.assertIn('obs_pd', res)
+        # self.assertIn('obs_pd', res)
+
+    def test_modify_namelist(self):
+        cfg = yaml.load(open('test_conf.yml'))
+        nl = Namelist(cfg)
+        nl.config['INPROF']['wi'][:] = 0
+        res = nl.dump()
+
+        self.assertGreater(len(res), 0)
+        self.assertIn('wi = \t0.0,\t0.0,', res)

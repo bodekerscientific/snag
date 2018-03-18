@@ -1,7 +1,7 @@
 import warnings
 from collections import OrderedDict
 from .nodes import ScalarNode, SectionNode, SequenceNode
-
+import numpy as np
 
 class RepresenterError(Exception):
     pass
@@ -129,6 +129,9 @@ Representer.add_representer(float,
                             Representer.represent_float)
 
 Representer.add_representer(list,
+                            Representer.represent_list)
+
+Representer.add_representer(np.ndarray,
                             Representer.represent_list)
 
 Representer.add_representer(tuple,

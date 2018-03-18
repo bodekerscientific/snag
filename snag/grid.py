@@ -86,7 +86,7 @@ class GriddedVariable(object):
         return
 
     def initial_profile(self):
-        return list(self.data[0])
+        return np.array(self.data[0])
 
     def as_tendencies(self):
         """
