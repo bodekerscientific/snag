@@ -28,15 +28,15 @@ CNTLSCM:
  l_ts_log:            true # report model progress
  model_levels_nml:    85 # the number of levels in forcing grid - must match that in UM namelist file SIZES
  land_points:         1 # land point(1) or sea(0). for 1, land_sea_mask must be set to true, and for 0 land_sea_mask=false
- nfor:                48 ## number of observations in obs forcing
+ nfor:                48 # number of observations in obs forcing. should be consistent input data, ndayin and obs_pd
 
 INDATA:
-  year_init:          2016 ## set from forcing input data?
-  month_init:         1 ## set from forcing input data?
-  day_init:           9 ## set from forcing input data?
-  hour_init:          0 ## set from forcing input data?
-  min_init:           0 ## set from forcing input data?
-  sec_init:           0 ## set from forcing input data?
+  year_init:          2016 # check for consistency with forcing input data
+  month_init:         1 # check for consistency with forcing input data
+  day_init:           9 # check for consistency with forcing input data
+  hour_init:          0 # check for consistency with forcing input data
+  min_init:           0 # check for consistency with forcing input data
+  sec_init:           0 # check for consistency with forcing input data
   salt_dim3:          85 # not sure why the third sea salt aerosol dimension is 85, but it is the same in TOGACOARE and GABLS3
   lat:                -77.85 # from ARM griddedsonde dataset
   long:               166.66 # from ARM griddedsonde dataset
@@ -46,7 +46,7 @@ INDATA:
 RUNDATA:
   exname_in:          'ARM_MCMURDO' # it appears this is needed, though not sure for what
   exname_out:         'ARM_MCMURDO'
-  ndayin:             1 ## days requested in run. should be set by input data.
+  ndayin:             1 # days requested in run. should be consistent with input data, nfor and obs_pd
   nminin:             0
   nsecin:             0
   timestep:           1200 # both GABLS and TOGACOARE have 20 min timestep
@@ -77,16 +77,16 @@ LOGIC:
   land_sea_mask:      true # land point(1) or sea point(0)  must match land_points
   land_ice_mask:      false # land ice point(1) or ice-free land point (0). mutually exclusive with soil_mask
   soil_mask:          true # land point with soil (1) or non-soil land_point. mutually exclusive with soil_mask
-  obs:                true ## use observational forcing for atmosphere
-  obs_surf:           true ## use observational forcing for surface (either fluxes or surface temperature)
+  obs:                true # use observational forcing for atmosphere
+  obs_surf:           true # use observational forcing for surface (either fluxes or surface temperature)
 # stats:              false
 # noforce:            false
 # geoforce:           false
 # geoinit:            false
   l_qpos_for:         true  # check q input after large scale forcing
   l_spec_z0:          false # use prescribed roughness lengths (from INPROF for ocean and INJULES for land.
-  test:               false  # output deatiled sub-timestep diagnostics
-  local_time:         false  # use local, rather than GMT for diagnostics
+  test:               false # output deatiled sub-timestep diagnostics
+  local_time:         false # use local, rather than GMT for diagnostics
 #  prindump_step:      true # see dump_days in RUNDATA
 #  prindump_day:       true
 #  grafdump_step:      true
@@ -135,7 +135,7 @@ INPHYSWITCH:
 INRADCLOUD: # do not use as currently disabled in SCM
 
 INOBSFOR:
-  obs_pd:    3600.0 ## time period for observational forcing (s)
+  obs_pd:    3600.0 # time period for observational forcing (s). should be consistent with input data, nfor and ndayin
   obs_bot:   0.0 # lower boundary to apply forcings (m) # should be consistent with
   obs_top:   85000.0 # upper boundary to apply forcings (m)
 
