@@ -20,5 +20,4 @@ def create_namelist(conf, stream=None):
         conf = yaml.load(open(conf))
 
     nl = Namelist(conf)
-
-    return dump(nl.as_dict(), stream)
+    return nl.dump(stream)

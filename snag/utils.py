@@ -1,9 +1,14 @@
 from collections import OrderedDict
+from datetime import datetime
+from logging import getLogger
 
 import numpy as np
+from cf_units import Unit
 from netCDF4 import num2date
 from xarray import DataArray
-from cf_units import Unit
+
+logger = getLogger(__name__)
+
 
 def merge_dicts(a, b):
     """
@@ -27,11 +32,15 @@ def is_multi_time(time_idx):
     return False
 
 
-def extract_times(nc_file, time_idx):
+def extract_times(nc_file, time_idx, time_variable='time'):
     multitime = is_multi_time(time_idx)
 
     dt = "datetime64[ns]"
-    time_list = num2date(nc_file['time'][:], nc_file['time'].units)
+    # Handle climatologies
+    if nc_file[time_variable].units == 'Month':
+        time_list = list(range(12))
+    else:
+        time_list = num2date(nc_file[time_variable][:], nc_file[time_variable].units)
     time_arr = np.asarray(time_list, dtype=dt)
 
     outattrs = OrderedDict()
@@ -50,7 +59,7 @@ def extract_times(nc_file, time_idx):
     return outarr
 
 
-def extract_vars(nc_file, var_name, time_idx=None, target_units=None):
+def extract_vars(nc_file, var_name, time_idx=None, target_units=None, time_variable='time', vertical_variable='height'):
     """
     Return a :class:`xarray.DataArray` object for the desired variable in a single NetCDF file object.
 
@@ -69,15 +78,18 @@ def extract_vars(nc_file, var_name, time_idx=None, target_units=None):
     try:
         var = nc_file.variables[var_name]
     except KeyError:
-        raise ValueError('No variable named {} available in {}'.format(var_name, nc_file.filepath())) # TODO: refactor to ValidationError
+        raise ValueError('No variable named {} available in {}'.format(var_name, nc_file.filepath()))  # TODO: refactor to ValidationError
     if len(var.shape) > 1:
         data = var[time_idx_or_slice, :]
     else:
         data = var[time_idx_or_slice]
 
     if target_units is not None and hasattr(var, 'units'):
-        u = Unit(var.units)
-        data = u.convert(data, target_units)
+        try:
+            u = Unit(var.units)
+            data = u.convert(data, target_units)
+        except ValueError:
+            logger.warning('Could not parse units "{}" for variable {}'.format(var.units, var_name))
 
     # Want to preserve the time dimension
     if not multitime:
@@ -100,14 +112,14 @@ def extract_vars(nc_file, var_name, time_idx=None, target_units=None):
 
     coords = OrderedDict()
 
-    if dimnames[0] == "time": # TODO needs to work around this step for ozone climatology
-        t = extract_times(nc_file, time_idx)
+    if dimnames[0] == time_variable:  # TODO needs to work around this step for ozone climatology
+        t = extract_times(nc_file, time_idx, time_variable)
         if not multitime:
             t = [t]
         coords[dimnames[0]] = t
 
-    if len(dimnames) == 2 and dimnames[1] == 'height': #TODO: Make generic
-        t = extract_vars(nc_file, 'height', slice(None), target_units='m')
+    if len(dimnames) == 2 and dimnames[1] == vertical_variable:
+        t = extract_vars(nc_file, vertical_variable, slice(None), target_units='m')
         coords['height'] = t
 
     data_array = DataArray(data, name=nc_file, dims=dimnames, coords=coords, attrs=attrs)

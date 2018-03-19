@@ -1,0 +1,120 @@
+---
+meta:
+  run_name: test_run
+  owner: Jared Lewis <jared@bodekerscientific.com>
+
+data:
+  filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/Blended_ARM_data_jan24_short.nc
+  p:
+    variable: pres
+  t:
+    variable: temp
+  q:
+    variable: sh
+  u:
+    variable: u_wind
+  v:
+    variable: v_wind
+  ozone:
+    filename: /mnt/shareddrive/Projects/DSC-SCM/from Laura/Ozone_climatology_2000s_ARM.nc
+    variable: Ozone
+    vertical_variable: level_height
+    climatology: true
+
+CNTLSCM:
+ l_netcdf_obs: false
+ l_ts_log: false
+ model_levels_nml:   85
+ land_points:        0
+ nfor:               77
+
+INDATA:
+  year_init:       1993
+  month_init:         1
+  day_init:           9
+  hour_init:          0
+  min_init:           0
+  sec_init:           0
+  salt_dim3:         85
+  lat:                 -2.0
+  long:               156.0
+  ozone: []
+# soil_type:       (land_points) * ?
+
+RUNDATA:
+  exname_in:       'IFA_TOGA'
+  exname_out:      'IFA_TOGA'
+  ndayin:            19
+  nminin:             0
+  nsecin:             0
+  timestep:           1200
+  ntml:               0
+  co2start:         0.0005
+  co2end:           0.0005
+  zh:               927.62
+  tstar_sea:        302.70
+  tstar_land:       302.70
+  tstar_sice:       302.70
+  albsoil:          0.17000000179e+0
+  dump_days:        [1,    90,   360,     0]
+
+LOGIC:
+# ancyc:              true
+  altdat:             false
+  obs:                true
+  obs_surf:           true
+# stats:              false
+  prindump_step:      true
+  prindump_day:       true
+  land_sea_mask:      false
+  land_ice_mask:      false
+  soil_mask:          false
+# noforce:            false
+# geoforce:           false
+# geoinit:            false
+  grafdump_step:      true
+  local_time:         false
+  l_qpos_for:         true
+
+INJULES:
+  gs:          0.0161874815822
+  rgrain:      [9*50.0]
+  smi_opt:      0
+  smcli:      [34.3100004242361, 85.7749997824430, 223.014991254210, 686.199998259544]
+  frac_typ:    [2*0.0, 1.00, 6*0.0]
+  canht:       [2*0.0, 1.50, 2*0.0]  # This gives us z0m = 0.15 for grass
+  catch:       [2*0.0, 1.12999999523163, 6*0.0]
+  snow_tile:   [9*0.0]
+  lai:         [5*2.0]
+  z0_tile:     [9*0.15] # this is ignored and overwritten by JULES for veg types
+  canopy:      [9*0.0]
+  infil_tile:  [2*0.0, 8.249999955296516e-3, 6*0.0]
+  tstar_tile:  [9*300.149993896484]
+
+INGWD:
+
+INPROF:
+
+DIAGS:
+ strm_format(1):      4
+ strm_unit(1):        -1
+# strm_format(1):      3
+# strm_unit(1):        37
+ strm_dumpstep:       +1
+ strm_rejectlist(1):  ''
+ l_SCMDiag_gen:    true
+ l_SCMDiag_conv:   true
+ l_SCMDiag_rad:    true
+ l_SCMDiag_bl:     true
+ l_SCMDiag_lsp:    true
+ l_SCMDiag_lscld:  true
+ l_SCMDiag_forc:   true
+ l_SCMDiag_incs:   true
+ l_SCMDiag_pc2:    true
+ l_SCMDiag_surf:   true
+ l_SCMDiag_sea:    true
+ l_SCMDiag_land:   false
+ l_SCMDiag_convss: true
+
+
+PHYSWITCH:
