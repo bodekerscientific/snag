@@ -78,7 +78,7 @@ LOGIC:
   land_ice_mask:      false # land ice point(1) or ice-free land point (0). mutually exclusive with soil_mask
   soil_mask:          true # land point with soil (1) or non-soil land_point. mutually exclusive with soil_mask
   obs:                true # use observational forcing for atmosphere
-  obs_surf:           true # use observational forcing for surface (either fluxes or surface temperature)
+  obs_surf:           false # use observational forcing for surface (either fluxes or surface temperature)
 # stats:              false
 # noforce:            false
 # geoforce:           false
