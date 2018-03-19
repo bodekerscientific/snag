@@ -1,9 +1,13 @@
 from collections import OrderedDict
+from datetime import datetime
+from logging import getLogger
 
 import numpy as np
 from cf_units import Unit
 from netCDF4 import num2date
 from xarray import DataArray
+
+logger = getLogger(__name__)
 
 
 def merge_dicts(a, b):
@@ -32,7 +36,11 @@ def extract_times(nc_file, time_idx, time_variable='time'):
     multitime = is_multi_time(time_idx)
 
     dt = "datetime64[ns]"
-    time_list = num2date(nc_file[time_variable][:], nc_file[time_variable].units)
+    # Handle climatologies
+    if nc_file[time_variable].units == 'Month':
+        time_list = list(range(12))
+    else:
+        time_list = num2date(nc_file[time_variable][:], nc_file[time_variable].units)
     time_arr = np.asarray(time_list, dtype=dt)
 
     outattrs = OrderedDict()
@@ -77,8 +85,11 @@ def extract_vars(nc_file, var_name, time_idx=None, target_units=None, time_varia
         data = var[time_idx_or_slice]
 
     if target_units is not None and hasattr(var, 'units'):
-        u = Unit(var.units)
-        data = u.convert(data, target_units)
+        try:
+            u = Unit(var.units)
+            data = u.convert(data, target_units)
+        except ValueError:
+            logger.warning('Could not parse units "{}" for variable {}'.format(var.units, var_name))
 
     # Want to preserve the time dimension
     if not multitime:

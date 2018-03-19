@@ -4,21 +4,22 @@ meta:
   owner: Jared Lewis <jared@bodekerscientific.com>
 
 data:
-  filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/awrinterpolatedsondeM1.c1.20160127.000030.nc
+  filename: /mnt/shareddrive/Projects/DSC-SCM/sonde data/Blended_ARM_data_jan24_short.nc
+  p:
+    variable: pres
+  t:
+    variable: temp
   q:
     variable: sh
   u:
     variable: u_wind
   v:
     variable: v_wind
-  w:
-    variable: v_wind
   ozone:
-    variable: sh
-  p:
-    variable: bar_pres
-  t:
-    variable: temp
+    filename: /mnt/shareddrive/Projects/DSC-SCM/from Laura/Ozone_climatology_2000s_ARM.nc
+    variable: Ozone
+    vertical_variable: level_height
+    climatology: true
 
 CNTLSCM:
  l_netcdf_obs: false

@@ -52,4 +52,4 @@ class TestGriddedVariableFromConf(TestCase):
             }
         }
         self.assertIsNone(GriddedVariable.from_scm_conf('theta', conf))
-        self.assertRaises(KeyError, GriddedVariable.from_scm_conf, 'p', conf)
+        self.assertRaises(ValueError, GriddedVariable.from_scm_conf, 'p', conf)
