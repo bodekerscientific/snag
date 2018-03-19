@@ -1,5 +1,3 @@
-from collections import OrderedDict
-
 import yaml
 from six import string_types
 

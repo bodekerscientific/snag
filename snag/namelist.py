@@ -1,6 +1,8 @@
 from collections import OrderedDict
 from logging import getLogger
 
+from snag import namelist_checks
+from snag.exceptions import ValidationError
 from snag.forcing import forcings
 from snag.grid import GriddedVariable, DATA_SECTION, VALID_VARIABLES
 from snag.serialize import dump
@@ -42,10 +44,6 @@ def check_value_eq(conf, variable, expected, message=None):
         logger.warning(message)
         return False
     return True
-
-
-class ValidationError(Exception):
-    pass
 
 
 class Namelist(object):
@@ -91,7 +89,20 @@ class Namelist(object):
         return dump(self.config, stream)
 
     def validate(self):
-        pass
+        checks = [f for name, f in namelist_checks.__dict__.items() if name.startswith('validate_')]
+        errors = []
+        for v in checks:
+            try:
+                v(self.config)
+            except ValidationError as e:
+                errors.append(str(e))
+            except KeyError as e:
+                errors.append('Could not find configuration parameter: {}'.format(e.args[0]))
+
+        if len(errors):
+            for e in errors:
+                logger.error(e)
+            raise ValidationError('Could not create a valid namelist')
 
     def _set_dt_config(self, conf):
         start_dt, end_dt = self.variables['p'].datetime_span()

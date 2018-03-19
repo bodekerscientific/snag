@@ -17,11 +17,11 @@ data:
     variable: u_wind
   v:
     variable: v_wind
-  w:
-    variable: #
   ozone:
-    #filename: P:/Projects/DSC-SCM/from Laura/Ozone_climatology_2000s_ARM.nc
-    variable: #
+    filename: P:/Projects/DSC-SCM/from Laura/Ozone_climatology_2000s_ARM.nc
+    variable: Ozone
+    vertical_variable: level_height
+    climatology: true
 
 CNTLSCM:
  l_netcdf_obs:        false # unsupported feature
