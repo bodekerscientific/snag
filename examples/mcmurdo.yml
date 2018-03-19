@@ -41,7 +41,7 @@ INDATA:
   lat:                -77.85 # from ARM griddedsonde dataset
   long:               166.66 # from ARM griddedsonde dataset
   gridbox_area:       1.0e+6 # default value
-  soil_type:          3 # only needed for land point. ice = 1 so match soil_mask and land_ice_mask??
+  soil_type:          3 # needed for land point. ice = 1 so match soil_mask and land_ice_mask??
 
 RUNDATA:
   exname_in:          'ARM_MCMURDO' # it appears this is needed, though not sure for what
@@ -98,13 +98,13 @@ INJULES:
   smi_opt:      0 # 0 use smcli, 1 use fsmc, 2 use sth
   smcli:      [34.31, 85.775, 223.015, 686.2] # initial soil moisture (kg/m3) on same layers as t_deep_soili
   # vegetation parameters for vegetation tiles (5)
-  canht:       [0.0, 0.0, 1.50, 0.0,0.0]  # This gives us z0m = 0.15 for grass
+  canht:       [0.0, 0.0, 1.50, 0.0,0.0]  # required. 1.5 gives us z0m = 0.15 for grass
   lai:         [2.0, 2.0, 2.0, 2.0, 2.0]
   gs:          1 # stomatal conductance (single value) (GABLS3 = 0.0161874815822)
   # other surface parameters for all tiles (9)
   z0_tile:     [0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15] # tile roughness length (m). this is ignored and overwritten by JULES for veg types
   tstar_tile:  [300.15, 300.15, 300.15, 300.15, 300.15, 300.15, 300.15, 300.15, 300.15] ## initial surface temperature of tiles initialised to tstari if not set
-  catch:       [0.0, 0.0, 1.13, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] # surface/canopy water capacity (snow-free land tiles)
+  catch:       [0.0, 0.0, 1.13, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] # required for land case. surface/canopy water capacity (snow-free land tiles)
   canopy:      [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] # surface/canopy water (snow-free land tiles)
   infil_tile:  [0.0, 0.0, 8.25e-3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] # maximum surface infiltration
   snow_tile:   [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] # lying snow on tiles (kg/m^3)
@@ -141,7 +141,7 @@ INOBSFOR:
 
   old_nml:   false # set to false as SNAG automatically creates files with new format
   old_rlx:   false # pre-UM7.7 version of forcing relaxation (unsupported)
-  l_vertadv: false # pre-UM7.7 version of horizontal advective forcing (unsupported)
+  l_vertadv: false # pre-UM7.7 version of horizontal-advective forcing (revealed forcing)(unsupported)
 
   rlx_t:     0      # default 0 = no relaxation
   rlx_q:     0      # default 0 = no relaxation

@@ -31,7 +31,7 @@ def validate_fland_ctile(config):
     if config['CNTLSCM']['land_points'] == 1 and config['RUNDATA']['fland_ctile'] == 1:
         print('100% Land case chosen')
     elif config['CNTLSCM']['land_points'] == 1 and config['RUNDATA']['fland_ctile'] > 0 and config['RUNDATA'][
-        'fland_ctile'] < 1:  # TODO(jono): This will never be true
+        'fland_ctile'] < 1:
         print('Coastal case chosen')
     elif config['CNTLSCM']['land_points'] == 0 and config['RUNDATA']['fland_ctile'] == 0:
         print('Sea case chosen')
@@ -40,9 +40,11 @@ def validate_fland_ctile(config):
 
 
 def validate_soil_type(config):
-    if config['CNTLSCM']['land_points'] == 1 and config['LOGIC']['land_ice_mask'] and config['INDATA']['soil_type'] == 1:
+    if config['CNTLSCM']['land_points'] == 1 and config['LOGIC']['land_ice_mask'] and config['INDATA'][
+        'soil_type'] == 1:
         pass
-    elif config['CNTLSCM']['land_points'] == 1 and config['LOGIC']['soil_mask'] and 1 < config['INDATA']['soil_type'] <= 3:
+    elif config['CNTLSCM']['land_points'] == 1 and config['LOGIC']['soil_mask'] and 1 < config['INDATA'][
+        'soil_type'] <= 3:
         pass
     elif config['CNTLSCM']['land_points'] == 0:
         pass
@@ -52,10 +54,12 @@ def validate_soil_type(config):
 
 def validate_suface_diag(config):
     # check correct diagnostics output
-    if config['CNTLSCM']['land_points'] == 1 and not config['DIAGS']['l_SCMDiag_sea'] and config['DIAGS']['l_SCMDiag_land']:
+    if config['CNTLSCM']['land_points'] == 1 and not config['DIAGS']['l_SCMDiag_sea'] and config['DIAGS'][
+        'l_SCMDiag_land']:
         # print('Land diagnostics output')
         pass
-    elif config['CNTLSCM']['land_points'] == 0 and config['DIAGS']['l_SCMDiag_sea'] and not config['DIAGS']['l_SCMDiag_land']:
+    elif config['CNTLSCM']['land_points'] == 0 and config['DIAGS']['l_SCMDiag_sea'] and not config['DIAGS'][
+        'l_SCMDiag_land']:
         # print('Sea diagnostics output')
         pass
     else:
@@ -74,9 +78,11 @@ def validate_number_soil_layers(config):
 
 def validate_length_of_simulation(config):
     forcing_length_s = config['INOBSFOR']['obs_pd'] * config['CNTLSCM']['nfor']
-    requested_length_s = config['RUNDATA']['ndayin'] * 86400 + config['RUNDATA']['nminin'] * 60 + config['RUNDATA']['nsecin']
+    requested_length_s = config['RUNDATA']['ndayin'] * 86400 + config['RUNDATA']['nminin'] * 60 + config['RUNDATA'][
+        'nsecin']
     if int(forcing_length_s) != int(requested_length_s):
-        raise ValidationError('stated length of forcing data (INOBSFOR:obs_pd * CNTLSCM:nfor does not match days requested in RUNDATA')
+        raise ValidationError(
+            'stated length of forcing data (INOBSFOR:obs_pd * CNTLSCM:nfor does not match days requested in RUNDATA')
 
 
 def validate_obs_forcing(config):
@@ -84,7 +90,8 @@ def validate_obs_forcing(config):
     if config['LOGIC']['obs']:
         for var in ['t_inc', 'q_star', 'u_inc', 'v_inc', 'w_inc', 't_bg', 'q_bg', 'u_bg', 'v_bg', 'w_bg']:
             if var in ['w_inc', 'w_bg']:  # w forcing has extra layer
-                if len(config['INOBSFOR'][var]) != (config['CNTLSCM']['nfor'] * (config['CNTLSCM']['model_levels_nml'] + 1)):
+                if len(config['INOBSFOR'][var]) != (
+                        config['CNTLSCM']['nfor'] * (config['CNTLSCM']['model_levels_nml'] + 1)):
                     raise ValidationError('Incorrect length of forcing variable {}'.format(var))
             elif len(config['INOBSFOR'][var]) != (config['CNTLSCM']['nfor'] * config['CNTLSCM']['model_levels_nml']):
                 raise ValidationError('Incorrect length of forcing variable {}'.format(var))
@@ -95,7 +102,10 @@ def validate_obs_forcing(config):
 def validate_intial_state(config):
     # check that intial state variables have no nan's and are the correct length,
     for var in ['p_in', 'thetai', 'qi', 'ui', 'vi', 'wi', 'w_advi']:
-        if len(config['INPROF'][var]) != config['CNTLSCM']['model_levels_nml']:  # TODO(jono): This isn't true. It depends on the vertical grid??
+        if var in ['w_inc', 'w_bg']:  # w variables have extra layer
+            if len(config['INPROF'][var]) != (config['CNTLSCM']['model_levels_nml'] + 1):
+                raise ValidationError('Incorrect length of forcing variable {}'.format(var))
+        elif len(config['INPROF'][var]) != config['CNTLSCM']['model_levels_nml']:
             raise ValidationError('Incorrect length of forcing variable {}'.format(var))
         if np.any(np.isnan(config['INPROF'][var])):
             raise ValidationError('Nan values in inital profile of {}'.format(var))
