@@ -30,8 +30,7 @@ def validate_land_ice_soil(config):
 def validate_fland_ctile(config):
     if config['CNTLSCM']['land_points'] == 1 and config['RUNDATA']['fland_ctile'] == 1:
         print('100% Land case chosen')
-    elif config['CNTLSCM']['land_points'] == 1 and config['RUNDATA']['fland_ctile'] > 0 and config['RUNDATA'][
-        'fland_ctile'] < 1:  # TODO(jono): This will never be true
+    elif config['CNTLSCM']['land_points'] == 1 and config['RUNDATA']['fland_ctile'] > 0 and config['RUNDATA']['fland_ctile'] < 1:
         print('Coastal case chosen')
     elif config['CNTLSCM']['land_points'] == 0 and config['RUNDATA']['fland_ctile'] == 0:
         print('Sea case chosen')
@@ -95,7 +94,10 @@ def validate_obs_forcing(config):
 def validate_intial_state(config):
     # check that intial state variables have no nan's and are the correct length,
     for var in ['p_in', 'thetai', 'qi', 'ui', 'vi', 'wi', 'w_advi']:
-        if len(config['INPROF'][var]) != config['CNTLSCM']['model_levels_nml']:  # TODO(jono): This isn't true. It depends on the vertical grid??
+        if var in ['p_in', 'w_inc', 'w_bg']:  # w variables have extra layer
+            if len(config['INPROF'][var]) != (config['CNTLSCM']['model_levels_nml'] + 1):
+                raise ValidationError('Incorrect length of forcing variable {}'.format(var))
+        elif len(config['INPROF'][var]) != config['CNTLSCM']['model_levels_nml']:
             raise ValidationError('Incorrect length of forcing variable {}'.format(var))
         if np.any(np.isnan(config['INPROF'][var])):
             raise ValidationError('Nan values in inital profile of {}'.format(var))
@@ -127,3 +129,9 @@ def validate_surface_forcing(config):
                     raise ValidationError('surface forcing variables {} does not match nfor'.format(var))
             except KeyError:
                 pass
+
+
+def validate_nml_style(config):
+    if config['LOGIC']['obs'][:] == True:
+        if config['INOBSFOR']['old_nml'] == True:
+            raise ValidationError('Old style observation forcing (old_nml) specified. SNAG creates new style formatting. Check')
