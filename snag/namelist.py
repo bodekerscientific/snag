@@ -99,9 +99,8 @@ class Namelist(object):
         errors = []
         for v in checks:
             try:
-                v(self.config)
-            except ValidationError as e:
-                errors.append(str(e))
+
+                errors.extend(v(self.config) or [])
             except KeyError as e:
                 errors.append('Could not find configuration parameter: {}'.format(e.args[0]))
 
