@@ -20,13 +20,14 @@ def validate_land_points(config):
 
 
 def validate_land_ice_soil(config):
-    if config['LOGIC']['land_ice_mask'] and not config['LOGIC']['soil_mask']:
-        print('Land ice subsurface chosen')
-    elif not config['LOGIC']['land_ice_mask'] and config['LOGIC']['soil_mask']:
-        print('Land soil subsurface chosen')
-    else:
-        return ['Incorrect combination of LOGIC:land_ice_mask and LOGIC:soil_mask']
-    return []
+    if config['CNTLSCM']['land_points'] == 1:  # only check for land case
+        if config['LOGIC']['land_ice_mask'] and not config['LOGIC']['soil_mask']:
+            print('Land ice subsurface chosen')
+        elif not config['LOGIC']['land_ice_mask'] and config['LOGIC']['soil_mask']:
+            print('Land soil subsurface chosen')
+        else:
+            return ['Incorrect combination of LOGIC:land_ice_mask and LOGIC:soil_mask']
+        return []
 
 
 def validate_fland_ctile(config):
@@ -67,13 +68,14 @@ def validate_suface_diag(config):
 
 
 def validate_number_soil_layers(config):
-    # check if soil layers are consistent for soil moisture and temperature. only needed for two options
-    if config['INJULES']['smi_opt'] == 0:
-        if len(config['INPROF']['t_deep_soili']) != len(config['INJULES']['smcli']):
-            return ['different number of soil layers specified in INPROF:t_deep_soili and INJULES:smcli']
-    if config['INJULES']['smi_opt'] == 2:
-        if len(config['INPROF']['t_deep_soili']) != len(config['INJULES']['sth']):
-            return ['different number of soil layers specified in INPROF:t_deep_soili and INJULES:sth']
+    if config['CNTLSCM']['land_points'] == 1:  # only check for land case
+        # check if soil layers are consistent for soil moisture and temperature. only needed for two options
+        if config['INJULES']['smi_opt'] == 0:
+            if len(config['INPROF']['t_deep_soili']) != len(config['INJULES']['smcli']):
+                return ['different number of soil layers specified in INPROF:t_deep_soili and INJULES:smcli']
+        if config['INJULES']['smi_opt'] == 2:
+            if len(config['INPROF']['t_deep_soili']) != len(config['INJULES']['sth']):
+                return ['different number of soil layers specified in INPROF:t_deep_soili and INJULES:sth']
 
 
 def validate_length_of_simulation(config):
@@ -121,38 +123,39 @@ def validate_intial_state(config):
 
 
 def validate_JULES_tiles(config):
-    # check the length of JULES tiles:
-    errors = []
-    vars = [
-        ('frac_typ', 9),
-        ('z0_tile', 9),
-        ('tstar_tile', 9),
-        ('catch', 9),
-        ('canopy', 9),
-        ('infil_tile', 9),
-        ('snow_tile', 9),
-        ('rgrain', 9),
-        ('canht', 5),
-        ('lai', 5)
-    ]
-    for v, expected_len in vars:
-        if v not in config['INJULES']:
-            errors.append('Variable {} is not present in INJULES'.format(v))
-        elif len(config['INJULES'][v]) != expected_len: # Can't take the length of an int or a float
-            errors.append('Incorrect length of Jules parameter {}. Expected length of {}'.format(v, expected_len))
+    if config['CNTLSCM']['land_points'] == 1: # only check for land case
+        # check the length of JULES tiles:
+        errors = []
+        vars = [
+            ('frac_typ', 9),
+            ('z0_tile', 9),
+            ('tstar_tile', 9),
+            ('catch', 9),
+            ('canopy', 9),
+            ('infil_tile', 9),
+            ('snow_tile', 9),
+            ('rgrain', 9),
+            ('canht', 5),
+            ('lai', 5)
+        ]
+        for v, expected_len in vars:
+            if v not in config['INJULES']:
+                errors.append('Variable {} is not present in INJULES'.format(v))
+            elif len(config['INJULES'][v]) != expected_len: # Can't take the length of an int or a float
+                errors.append('Incorrect length of Jules parameter {}. Expected length of {}'.format(v, expected_len))
 
-    try:
-        if not isinstance(config['INJULES']['smi_opt'], int):
-            errors.append('Expected Jules parameter smi_opt to be an int')
-    except KeyError:
-        errors.append('Variable smi_opt is not present in INJULES')
+        try:
+            if not isinstance(config['INJULES']['smi_opt'], int):
+                errors.append('Expected Jules parameter smi_opt to be an int')
+        except KeyError:
+            errors.append('Variable smi_opt is not present in INJULES')
 
-    try:
-        if not isinstance(config['INJULES']['gs'], float):
-            errors.append('Expected Jules parameter gs to be a float')
-    except KeyError:
-        errors.append('Variable gs is not present in INJULES')
-    return errors
+        try:
+            if not isinstance(config['INJULES']['gs'], float):
+                errors.append('Expected Jules parameter gs to be a float')
+        except KeyError:
+            errors.append('Variable gs is not present in INJULES')
+        return errors
 
 
 def validate_surface_forcing(config):
