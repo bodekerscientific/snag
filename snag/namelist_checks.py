@@ -126,11 +126,11 @@ def validate_JULES_tiles(config):
     vars = [
         ('frac_typ', 9),
         ('z0_tile', 9),
-        ('t_star_tile', 9),
+        ('tstar_tile', 9),
         ('catch', 9),
         ('canopy', 9),
         ('infil_tile', 9),
-        ('snow_file', 9),
+        ('snow_tile', 9),
         ('rgrain', 9),
         ('canht', 5),
         ('lai', 5)

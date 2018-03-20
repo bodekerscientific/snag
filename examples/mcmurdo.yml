@@ -4,7 +4,7 @@ meta:
   owner: Jono Conway <jono@bodekerscientific.com>
 
 data:
-  filename: P:/Projects/DSC-SCM/sonde data/Blended_ARM_data_jan24_short.nc
+  filename: P:/Projects/DSC-SCM/sonde data/Blended_ARM_data_jan24_30min.nc
   #
   #awrinterpolatedsondeM1.c1.20160124.000030
   p:
@@ -16,6 +16,8 @@ data:
   u:
     variable: u_wind
   v:
+    variable: v_wind
+  w:
     variable: v_wind
   ozone:
     filename: P:/Projects/DSC-SCM/from Laura/Ozone_climatology_2000s_ARM.nc
@@ -31,15 +33,15 @@ CNTLSCM:
  l_ts_log:            true # report model progress
  model_levels_nml:    85 # the number of levels in forcing grid - must match that in UM namelist file SIZES
  land_points:         1 # land point(1) or sea(0). for 1, land_sea_mask must be set to true, and for 0 land_sea_mask=false
- nfor:                60 # number of observations in obs forcing. should be consistent input data, ndayin and obs_pd
+ nfor:                47 # number of observations in obs forcing. should be consistent input data, ndayin and obs_pd
 
 INDATA:
   year_init:          2016 # check for consistency with forcing input data
   month_init:         1 # check for consistency with forcing input data
-  day_init:           9 # check for consistency with forcing input data
+  day_init:           24 # check for consistency with forcing input data
   hour_init:          0 # check for consistency with forcing input data
   min_init:           0 # check for consistency with forcing input data
-  sec_init:           0 # check for consistency with forcing input data
+  sec_init:           30 # check for consistency with forcing input data
   salt_dim3:          85 # not sure why the third sea salt aerosol dimension is 85, but it is the same in TOGACOARE and GABLS3
   lat:                -77.85 # from ARM griddedsonde dataset
   long:               166.66 # from ARM griddedsonde dataset
@@ -49,8 +51,8 @@ INDATA:
 RUNDATA:
   exname_in:          'ARM_MCMURDO' # it appears this is needed, though not sure for what
   exname_out:         'ARM_MCMURDO'
-  ndayin:             1 # days requested in run. should be consistent with input data, nfor and obs_pd
-  nminin:             0
+  ndayin:             0 # days requested in run. should be consistent with input data, nfor and obs_pd
+  nminin:             1410
   nsecin:             0
   timestep:           1200 # both GABLS and TOGACOARE have 20 min timestep
   ntrad1:             1 # first timestep in which radiation called
@@ -103,7 +105,7 @@ INJULES:
   # vegetation parameters for vegetation tiles (5)
   canht:       [0.0, 0.0, 1.50, 0.0,0.0]  # required. 1.5 gives us z0m = 0.15 for grass
   lai:         [2.0, 2.0, 2.0, 2.0, 2.0]
-  gs:          1 # stomatal conductance (single value) (GABLS3 = 0.0161874815822)
+  gs:          1.0 # stomatal conductance (single value) (GABLS3 = 0.0161874815822)
   # other surface parameters for all tiles (9)
   z0_tile:     [0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15] # tile roughness length (m). this is ignored and overwritten by JULES for veg types
   tstar_tile:  [300.15, 300.15, 300.15, 300.15, 300.15, 300.15, 300.15, 300.15, 300.15] ## initial surface temperature of tiles initialised to tstari if not set
@@ -138,13 +140,13 @@ INPHYSWITCH:
 INRADCLOUD: # do not use as currently disabled in SCM
 
 INOBSFOR:
-  obs_pd:    3600.0 # time period for observational forcing (s). should be consistent with input data, nfor and ndayin
+  obs_pd:    1800.0 # time period for observational forcing (s). should be consistent with input data, nfor and ndayin
   obs_bot:   0.0 # lower boundary to apply forcings (m) # should be consistent with
   obs_top:   85000.0 # upper boundary to apply forcings (m)
 
   old_nml:   false # set to false as SNAG automatically creates files with new format
   old_rlx:   false # pre-UM7.7 version of forcing relaxation (unsupported)
-  l_vertadv: false # pre-UM7.7 version of horizontal-advective forcing (revealed forcing)(unsupported)
+  l_vertadv: true # pre-UM7.7 version of horizontal-advective forcing (revealed forcing)(unsupported)
 
   rlx_t:     0      # default 0 = no relaxation
   rlx_q:     0      # default 0 = no relaxation
