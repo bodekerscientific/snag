@@ -93,8 +93,8 @@ def validate_obs_forcing(config):
 
 def validate_intial_state(config):
     # check that intial state variables have no nan's and are the correct length,
-    for var in ['p_in', 'thetai', 'qi', 'ui', 'vi', 'wi', 'w_advi']:
-        if var in ['p_in', 'w_inc', 'w_bg']:  # w variables have extra layer
+    for var in ['p_in', 'theta', 'qi', 'ui', 'vi', 'wi', 'w_advi']:
+        if var in ['p_in', 'wi', 'w_advi']:  # w variables have extra layer
             if len(config['INPROF'][var]) != (config['CNTLSCM']['model_levels_nml'] + 1):
                 raise ValidationError('Incorrect length of forcing variable {}'.format(var))
         elif len(config['INPROF'][var]) != config['CNTLSCM']['model_levels_nml']:
@@ -105,7 +105,7 @@ def validate_intial_state(config):
 
 def validate_JULES_tiles(config):
     # check the length of JULES tiles:
-    for var in ['frac_typ', 'z0_tile', 't_star_file', 'catch', 'canopy', 'infil_tile', 'snow_file', 'rgrain']:
+    for var in ['frac_typ', 'z0_tile', 't_star_tile', 'catch', 'canopy', 'infil_tile', 'snow_file', 'rgrain']:
         if len(config['INJULES'][var]) != 9:
             raise ValidationError('Incorrect length of Jules parameter {}'.format(var))
     for var in ['canht', 'lai']:
@@ -132,6 +132,7 @@ def validate_surface_forcing(config):
 
 
 def validate_nml_style(config):
-    if config['LOGIC']['obs'][:] == True:
+    if config['LOGIC']['obs'] == True:
         if config['INOBSFOR']['old_nml'] == True:
             raise ValidationError('Old style observation forcing (old_nml) specified. SNAG creates new style formatting. Check')
+

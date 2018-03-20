@@ -23,12 +23,15 @@ data:
     vertical_variable: level_height
     climatology: true
 
+forcing:
+  obs:
+
 CNTLSCM:
  l_netcdf_obs:        false # unsupported feature
  l_ts_log:            true # report model progress
  model_levels_nml:    85 # the number of levels in forcing grid - must match that in UM namelist file SIZES
  land_points:         1 # land point(1) or sea(0). for 1, land_sea_mask must be set to true, and for 0 land_sea_mask=false
- nfor:                48 # number of observations in obs forcing. should be consistent input data, ndayin and obs_pd
+ nfor:                60 # number of observations in obs forcing. should be consistent input data, ndayin and obs_pd
 
 INDATA:
   year_init:          2016 # check for consistency with forcing input data
@@ -57,12 +60,12 @@ RUNDATA:
   max_trop_level:     0 # 0 = calculate min/max tropopause level from climatologies
   co2start:           5.420e-4  # CO2 mixing ratio in kg/kg
   co2end:             5.420e-4
-  dolr_rts:           0.0  # TOA - surface upward longwave radiation 9(not entirely sure what this is)
-  orog:               -0.70 # orography height in m
+  dolr_rts:           0.0  # TOA - surface upward longwave radiation (not entirely sure what this is)
+  orog:               0.0 # orography height in m
   albsoil:            0.23 # soil albedo
-  sice_alb:           0.7 # sea ice albedo
-#  land_alb:           = 0.5       # not needed if info given in JULES section
-  fland_ctile:        1.0     # some logic # fraction land, must = 0 for land_points=0, or between 0 and 1 for land_points=1 (fraction of land (either ice or soil) and sea)
+  sice_alb:           0.8 # sea ice albedo
+#  land_alb:           = 0.5  # mean land albedo not needed if using tiles in JULES
+  fland_ctile:        1.0  # fraction land # some logic, must = 0 for land_points=0, or between 0 and 1 for land_points=1 (fraction of land (either ice or soil) and sea)
   tstar_sea:          300.150 ## can be set from tstari - mean surface temperture
   tstar_land:         300.150 ## can be set from tstari
   tstar_sice:         300.150 ## can be set from tstari
@@ -115,7 +118,7 @@ INGWD:
 INPROF:
 # get profiles of theta, qi, p_in, ui, vi from files. wi and w_advi set to 0
   kill_interp:    true # input data already on model levels.
-  z0mseai:        1.0e-4 # initial sea surface roughness length (required if l_spec_z0 = true)
+  z0mseai:        1.0e-4 # initial sea surface roughness length (required if LOGIC:l_spec_z0 = true)
   u_0:            0.0 # sea surface currents
   v_0:            0.0 # sea surface currents
   ice_fract:      0.0 # grid-box sea-ice fraction
