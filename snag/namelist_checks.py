@@ -20,14 +20,15 @@ def validate_land_points(config):
 
 
 def validate_land_ice_soil(config):
-    if config['CNTLSCM']['land_points'] == 1:  # only check for land case
-        if config['LOGIC']['land_ice_mask'] and not config['LOGIC']['soil_mask']:
-            print('Land ice subsurface chosen')
-        elif not config['LOGIC']['land_ice_mask'] and config['LOGIC']['soil_mask']:
-            print('Land soil subsurface chosen')
-        else:
-            return ['Incorrect combination of LOGIC:land_ice_mask and LOGIC:soil_mask']
-        return []
+    if config['LOGIC']['land_ice_mask'] and not config['LOGIC']['soil_mask']:
+        print('Land ice subsurface chosen')
+    elif not config['LOGIC']['land_ice_mask'] and config['LOGIC']['soil_mask']:
+        print('Land soil subsurface chosen')
+    elif config['CNTLSCM']['land_points'] == 0 and not config['LOGIC']['land_ice_mask'] and not config['LOGIC']['soil_mask']:
+        pass
+    else:
+        return ['Incorrect combination of LOGIC:land_ice_mask and LOGIC:soil_mask']
+    return []
 
 
 def validate_fland_ctile(config):
