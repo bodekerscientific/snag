@@ -66,13 +66,19 @@ class Namelist(object):
                     'Could not parse data source for variable {}. Check \'{}\' section'.format(v, DATA_SECTION))
         self.variables['theta'] = GriddedVariable.calculate_theta(self.variables['p'], self.variables['t'], )
 
+        # Update any dates/levels that were not explicitly specified
+        for v in self.variables:
+            if self.variables[v]._dts is None:
+                self.variables[v]._dts = self.variables['p']._dts
+                self.variables[v].levels = self.variables['p'].levels
+
         # Instantiate the forcings
-        self.forcings = {}
-        if 'forcings' in conf:
-            for f in conf['forcings']:
+        self.forcings = []
+        if 'forcing' in conf:
+            for f in conf['forcing']:
                 try:
                     Forcing = forcings[f]
-                    self.forcings[f] = Forcing(conf['forcings'][f])
+                    self.forcings.append(Forcing(conf['forcing'][f]))
                 except KeyError:
                     raise ValueError('No such forcing named {}'.format(f))
 
@@ -145,16 +151,13 @@ class Namelist(object):
             if k in self._raw_conf and self._raw_conf[k] is not None:
                 snag_config[k].update(self._raw_conf[k])
 
-        # create the initial conditions
-        for v in ('u', 'v', 'w', 'theta', 'q'):
-            snag_config['INPROF']['{}i'.format(v)] = self.variables[v].initial_profile()
-        snag_config['INPROF']['p_in'] = self.variables['p'].initial_profile()
-
         self._set_dt_config(snag_config)
 
         # Process the forcings
         for forcing in self.forcings:
-            forcing.get_params(self.variables)
+            forcing_conf = forcing.get_params(self.variables)
+            for k in forcing_conf:
+                snag_config[k].update(forcing_conf[k])
 
         # Override with explicitly set params
         for k in DEFAULT_NAMELIST_SECTIONS:

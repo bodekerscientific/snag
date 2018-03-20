@@ -1,4 +1,17 @@
-class Forcing(object):
+class BaseForcing(object):
+    def __init__(self, conf):
+        self.forcing_conf = conf
+
+    def check_if_active(self, conf):
+        """
+        Check if this type of forcing is to be applied.
+
+        TODO: I don't really like this interface
+        :param conf:
+        :return:
+        """
+        return False
+
     def get_params(self, variables):
         """
         Get the configuration which is written to the namelist
@@ -10,7 +23,10 @@ class Forcing(object):
         raise NotImplementedError()
 
 
-class StatisticalForcing(Forcing):
+class StatisticalForcing(BaseForcing):
+    def check_if_active(self, conf):
+        return 'stats' in conf['LOGIC'] and conf['LOGIC']['stats']
+
     def get_params(self, variables):
         return {
             'LOGIC': {
@@ -20,13 +36,18 @@ class StatisticalForcing(Forcing):
         }
 
 
-class ObservationalForcing(Forcing):
+class ObservationalForcing(BaseForcing):
+    def check_if_active(self, conf):
+        return 'obs' in conf['LOGIC'] and conf['LOGIC']['obs']
+
     def get_params(self, variables):
         conf = {
             'LOGIC': {
                 'obs': True,
                 # 'obs_pd':
             },
+            'INPROF': {},
+            'INOBSFOR': {}
         }
 
         for v in ('u', 'v', 'w'):
@@ -38,16 +59,17 @@ class ObservationalForcing(Forcing):
         conf['INOBSFOR']['q_star'] = variables['q'].as_tendencies()
 
         # Add pressure and theta levels
-        #TODO: Implement
-        conf['INOBSFOR']['p_in'] = variables['p'].as_tendencies()
-        conf['INOBSFOR']['q_star'] = variables['theta'].as_tendencies()
+        conf['INPROF']['p_in'] = variables['p'].initial_profile()
+        conf['INPROF']['theta'] = variables['theta'].initial_profile()
+
+        conf['INOBSFOR']['t_inc'] = variables['t'].as_tendencies()
 
         #TODO: handle surfaces
 
         return conf
 
 
-class RevealedForcing(Forcing):
+class RevealedForcing(BaseForcing):
     def get_params(self, variables):
         return {
             'LOGIC': {
@@ -62,7 +84,7 @@ RELAXATION_INITIAL = 0
 RELAXATION_BG = 0
 
 
-class RelaxationForcing(Forcing):
+class RelaxationForcing(BaseForcing):
 
     def get_params(self, variables):
         return {
@@ -72,7 +94,7 @@ class RelaxationForcing(Forcing):
 
 forcings = {
     'stat': StatisticalForcing,
-    'obs': StatisticalForcing,
-    'revealed': StatisticalForcing,
-    'relaxation': StatisticalForcing,
+    'obs': ObservationalForcing,
+    'revealed': RevealedForcing,
+    'relaxation': RelaxationForcing,
 }

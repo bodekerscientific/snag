@@ -90,15 +90,15 @@ class GriddedVariable(object):
     def set_data(self, data):
         self.levels, self.data = vert_interp(to_np(data), self.var_name, to_np(data.coords['height']),
                                              vertical_grid=self.config['grid'])
-        self._dts = data.coords['time']
+        self._dts = to_np(data.coords['time']).astype('datetime64[s]').tolist()
 
     def _vertical_interpolation(self, data):
         # Pass through to call Jono's script
         return
 
     def datetime_span(self):
-        start_dt = to_np(self._dts[0]).astype('datetime64[s]').tolist()
-        end_dt = to_np(self._dts[-1]).astype('datetime64[s]').tolist()
+        start_dt = self._dts[0]
+        end_dt = self._dts[-1]
         return start_dt, end_dt
 
     def initial_profile(self):
@@ -109,7 +109,7 @@ class GriddedVariable(object):
         Calculate tendencies from the raw_data
         :return: A numpy array
         """
-        return calc_tendencies(self.data, self._dts)
+        return calc_tendencies(self.data[1:], self._dts)
 
     @classmethod
     def from_scm_conf(cls, var, conf):
