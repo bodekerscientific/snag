@@ -109,7 +109,7 @@ class GriddedVariable(object):
         Calculate tendencies from the raw_data
         :return: A numpy array
         """
-        return calc_tendencies(self.data[1:], self._dts)
+        return calc_tendencies(self.data, self._dts)
 
     @classmethod
     def from_scm_conf(cls, var, conf):

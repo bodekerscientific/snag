@@ -92,11 +92,12 @@ def validate_obs_forcing(config):
             if var not in config['INOBSFOR']:
                 errors.append('Variable {} is not present in INOBSFOR'.format(var))
                 continue
+
             if var in ['w_inc', 'w_bg']:  # w forcing has extra layer
-                if len(config['INOBSFOR'][var]) != (config['CNTLSCM']['nfor'] * (config['CNTLSCM']['model_levels_nml'] + 1)):
-                    errors.append('Incorrect length of forcing variable {}'.format(var))
-            elif len(config['INOBSFOR'][var]) != (config['CNTLSCM']['nfor'] * config['CNTLSCM']['model_levels_nml']):
-                errors.append('Incorrect length of forcing variable {}'.format(var))
+                if config['INOBSFOR'][var].shape != (config['CNTLSCM']['nfor'], (config['CNTLSCM']['model_levels_nml'] + 1)):
+                    errors.append('Incorrect shape of forcing variable {}'.format(var))
+            elif config['INOBSFOR'][var].shape != (config['CNTLSCM']['nfor'], config['CNTLSCM']['model_levels_nml']):
+                errors.append('Incorrect shape of forcing variable {}'.format(var))
             if np.any(np.isnan(config['INOBSFOR'][var])):
                 errors.append('Nan values in forcing variable {}'.format(var))
     return errors
