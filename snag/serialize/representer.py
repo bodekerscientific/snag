@@ -1,6 +1,6 @@
 import warnings
 from collections import OrderedDict
-from .nodes import ScalarNode, SectionNode, SequenceNode
+from .nodes import ScalarNode, SectionNode, SequenceNode, MultiLineSequenceNode
 import numpy as np
 
 class RepresenterError(Exception):
@@ -115,6 +115,14 @@ class Representer(BaseRepresenter):
     def represent_dict(self, data, **kwargs):
         return self.represent_section(data)
 
+    def represent_array(self, data, **kwargs):
+        data = np.asarray(data)
+        if data.ndim == 2:
+            data = data.T # Fortran ordering
+            return MultiLineSequenceNode([self.represent_sequence(i.ravel(), **kwargs) for i in data])
+        else:
+            return self.represent_sequence(data.ravel(), **kwargs)
+
 
 Representer.add_representer(str,
                             Representer.represent_str)
@@ -132,7 +140,7 @@ Representer.add_representer(list,
                             Representer.represent_list)
 
 Representer.add_representer(np.ndarray,
-                            Representer.represent_list)
+                            Representer.represent_array)
 
 Representer.add_representer(tuple,
                             Representer.represent_list)

@@ -28,3 +28,7 @@ class SectionNode(CollectionNode):
 
 class SequenceNode(CollectionNode):
     id = 'sequence'
+
+
+class MultiLineSequenceNode(CollectionNode):
+    id = 'multi_line'

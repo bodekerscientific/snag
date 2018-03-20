@@ -57,3 +57,8 @@ class Serializer:
                 self.emit(' = ')
                 self.serialize_node(value)
                 self.emit('\n')
+        elif isinstance(node, MultiLineSequenceNode):
+            for item in node.value:
+                item.start_mark = '\t\t\t'
+                self.serialize_node(item)
+                self.emit('\n')
