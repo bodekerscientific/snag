@@ -140,7 +140,7 @@ def calc_tendencies(obs_array, obs_dt_array):
     tend = np.gradient(obs_array, axis=0)
 
     # scale units to per day
-    tstep_per_day = (obs_dt_array[1] - obs_dt_array[0]).total_seconds() / 86400.0
-    tend_per_day = tend / tstep_per_day
+    tstep_per_day = 86400.0 / (obs_dt_array[1] - obs_dt_array[0]).total_seconds()
+    tend_per_day = tend * tstep_per_day
 
     return tend_per_day[1:,:]

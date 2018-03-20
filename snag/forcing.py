@@ -54,6 +54,9 @@ class ObservationalForcing(BaseForcing):
             conf['INPROF']['{}i'.format(v)] = variables[v].initial_profile()
             conf['INOBSFOR']['{}_inc'.format(v)] = variables[v].as_tendencies()
 
+        # Initialise initial vertical advection profile # TODO (jono) figure out some logic around this
+        conf['INPROF']['w_advi'] = variables['w'].initial_profile()
+
         # Specific humidity uses qstar instead of q_inc for the tendencies
         conf['INPROF']['qi'] = variables['q'].initial_profile()
         conf['INOBSFOR']['q_star'] = variables['q'].as_tendencies()
