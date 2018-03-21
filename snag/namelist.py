@@ -157,6 +157,8 @@ class Namelist(object):
             for k in forcing_conf:
                 snag_config[k].update(forcing_conf[k])
 
+        snag_config['RUNDATA']['ozone'] = self.variables['ozone'].initial_profile()
+
         # Override with explicitly set params
         for k in DEFAULT_NAMELIST_SECTIONS:
             if k in self._raw_conf and self._raw_conf[k] is not None:

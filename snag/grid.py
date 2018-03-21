@@ -144,7 +144,13 @@ class GriddedVariable(object):
                     return cls.create_from_arr(var, d)
 
             n = cls(var, var_conf)
+
             data = load_from_nc(var, n.config)
+
+            # Extract the month if interest if the input data is a climatology
+            if var_conf.get('climatology', False):
+                month = conf['INDATA']['month_init']
+                data = data[month - 1]  # Assumes months are ordered 1-12
 
             n.set_data(data)
         return n
