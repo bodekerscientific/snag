@@ -33,7 +33,7 @@ CNTLSCM:
  l_ts_log:            true # report model progress
  model_levels_nml:    85 # the number of levels in forcing grid - must match that in UM namelist file SIZES
  land_points:         1 # land point(1) or sea(0). for 1, land_sea_mask must be set to true, and for 0 land_sea_mask=false
- nfor:                47 # number of observations in obs forcing. should be consistent input data, ndayin and obs_pd
+ nfor:                47 # number of observations in obs forcing. should be consistent input data, ndayin and obs_pd. obs forcing includes initial timestep??
 
 INDATA:
   year_init:          2016 # check for consistency with forcing input data
@@ -52,9 +52,9 @@ RUNDATA:
   exname_in:          'ARM_MCMURDO' # it appears this is needed, though not sure for what
   exname_out:         'ARM_MCMURDO'
   ndayin:             0 # days requested in run. should be consistent with input data, nfor and obs_pd
-  nminin:             1410
+  nminin:             1380
   nsecin:             0
-  timestep:           1200 # both GABLS and TOGACOARE have 20 min timestep
+  timestep:           900 # needs to be a factor of obs_pd
   ntrad1:             1 # first timestep in which radiation called
   zh:                 500.0 # height (above surface) of the top of boundary layer
   ntml:               0 # model level of top of surface mixed layer (both GABLS and TOGACOARE use 0)
@@ -160,11 +160,11 @@ INOBSFOR:
   tau_v:     3600.0 # timescale for relaxation (s; default 3600.0)
   tau_w:     3600.0 # timescale for relaxation (s; default 3600.0)
 
-  plev_t:    1e+10 # apply relaxation on all levels with pressure less than (default = 1.51e+5)
-  plev_q:    1e+10
-  plev_u:    1e+10
-  plev_v:    1e+10
-  plev_w:    1e+10
+  plev_t:    1.0e+10 # apply relaxation on all levels with pressure less than (default = 1.51e+5)
+  plev_q:    1.0e+10
+  plev_u:    1.0e+10
+  plev_v:    1.0e+10
+  plev_w:    1.0e+10
 
 
 DIAGS:

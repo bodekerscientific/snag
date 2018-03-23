@@ -180,3 +180,9 @@ def validate_nml_style(config):
     if config['LOGIC']['obs'] == True and config['INOBSFOR']['old_nml'] == True:
         return ['Old style observation forcing (old_nml) specified. SNAG creates new style formatting. Check']
     return []
+
+
+def validate_timestep(config):
+    if config['INOBSFOR']['obs_pd'] % config['RUNDATA']['timestep'] != 0:
+        return ['RUNDATA:timestep is not a factor of INOBSFOR:obs_pd']
+    return []
