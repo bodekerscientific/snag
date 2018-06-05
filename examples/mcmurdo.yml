@@ -31,7 +31,7 @@ forcing:
 CNTLSCM:
  l_netcdf_obs:        false # unsupported feature
  l_ts_log:            true # report model progress
- model_levels_nml:    85 # the number of levels in forcing grid - must match that in UM namelist file SIZES
+ model_levels_nml:    85 # the number of levels in forcing grid - must match "model_levels" that in UM namelist file SIZES
  land_points:         1 # land point(1) or sea(0). for 1, land_sea_mask must be set to true, and for 0 land_sea_mask=false
  nfor:                47 # number of observations in obs forcing. should be consistent input data, ndayin and obs_pd
 

@@ -186,3 +186,13 @@ def validate_timestep(config):
     if config['INOBSFOR']['obs_pd'] % config['RUNDATA']['timestep'] != 0:
         return ['RUNDATA:timestep is not a factor of INOBSFOR:obs_pd']
     return []
+
+
+def validate_l_SCMDiag(config):
+    if config['DIAGS']['l_SCMDiag_land'] == False and config['CNTLSCM']['land_points'] == 1:
+        return ['land point, but no land diagnostic chosen. Check land_points and DIAGS']
+    if config['DIAGS']['l_SCMDiag_sea'] == False and config['CNTLSCM']['land_points'] == 0:
+        return ['sea point, but no sea diagnostic chosen. Check land_points and DIAGS']
+    if config['DIAGS']['l_SCMDiag_sea'] == config['DIAGS']['l_SCMDiag_land']:
+        return ['Both sea and land diagnostics chosen. Check DIAGS consistent with land_points']
+    return []

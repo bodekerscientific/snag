@@ -1,41 +1,49 @@
 ---
+# YAML configuration file for use in SNAG.
+
+# take care with scientific notation for numbers: 1.0e-4 will be interpreted as a number, but 1e-4 will incorrectly display as a string in the resulting namelist.
+# This will break the build and show up as an "input conversion error" in the Rose error log
+# list arrays [1.5, 1.3, 1.2]
+
 meta:
   run_name: example_run_mcmurdo
   owner: Jono Conway <jono@bodekerscientific.com>
 
 data:
-  filename: P:/Projects/DSC-SCM/sonde data/Blended_ARM_data_jan24_30min.nc
-  #
-  #awrinterpolatedsondeM1.c1.20160124.000030
+  filename: P:/Projects/DSC-SCM/sonde data/Blended_ARM_data_jan24_30min.nc # path to netCDF containing boundary condition data
+
   p:
-    variable: pres
+    variable: pres # variable name in netCDF
   t:
-    variable: temp
+    variable: temp # variable name in netCDF
   q:
-    variable: sh
+    variable: sh # variable name in netCDF
   u:
-    variable: u_wind
+    variable: u_wind # variable name in netCDF
   v:
-    variable: v_wind
+    variable: v_wind # variable name in netCDF
   w:
-    variable: v_wind
+    variable: v_wind # variable name in netCDF
   ozone:
-    filename: P:/Projects/DSC-SCM/from Laura/Ozone_climatology_2000s_ARM.nc
-    variable: Ozone
-    vertical_variable: level_height
-    climatology: true
+    filename: P:/Projects/DSC-SCM/from Laura/Ozone_climatology_2000s_ARM.nc # path to netCDF containing ozone climatology
+    variable: Ozone # variable name in netCDF
+    vertical_variable: level_height # variable name in netCDF
+    climatology: true  # is ozone file a climatology? if so then take the climatology from the month of the input data
 
-forcing:
-  obs:
+forcing: # option to calculate input data for given forcing. Comment entries below for various options
+  obs: # ObservationalForcing,
+  # revealed: # RevealedForcing (not yet implemented in SNAG - set in INOBSFOR - l_vertadv)
+  # relaxation: # RelaxationForcing (not yet implemented in SNAG - set in INOBSFOR)
+  # stat: # StatisticalForcing (not yet implemented in SNAG)
 
-CNTLSCM:
- l_netcdf_obs:        false # unsupported feature
+CNTLSCM: # SCM top level control
+ l_netcdf_obs:        false # unsupported feature (set to false)
  l_ts_log:            true # report model progress
- model_levels_nml:    85 # the number of levels in forcing grid - must match that in UM namelist file SIZES
+ model_levels_nml:    85 # the number of levels in forcing grid - must match model_levels in UM namelist file SIZES (set in ROSES)
  land_points:         1 # land point(1) or sea(0). for 1, land_sea_mask must be set to true, and for 0 land_sea_mask=false
- nfor:                47 # number of observations in obs forcing. should be consistent input data, ndayin and obs_pd. obs forcing includes initial timestep??
+ nfor:                47 # number of observations in obs forcing. should be consistent with length of input data, ndayin + nminin + nsecin and obs_pd. obs forcing includes initial timestep
 
-INDATA:
+INDATA: # time and spatial dimension control
   year_init:          2016 # check for consistency with forcing input data
   month_init:         1 # check for consistency with forcing input data
   day_init:           24 # check for consistency with forcing input data
@@ -45,15 +53,15 @@ INDATA:
   salt_dim3:          85 # not sure why the third sea salt aerosol dimension is 85, but it is the same in TOGACOARE and GABLS3
   lat:                -77.85 # from ARM griddedsonde dataset
   long:               166.66 # from ARM griddedsonde dataset
-  gridbox_area:       1.0e+6 # default value
+  gridbox_area:       1.0e+6 # default value 1.0e+6
   soil_type:          3 # needed for land point. ice = 1 so match soil_mask and land_ice_mask??
 
-RUNDATA:
+RUNDATA: # various model options
   exname_in:          'ARM_MCMURDO' # it appears this is needed, though not sure for what
   exname_out:         'ARM_MCMURDO'
-  ndayin:             0 # days requested in run. should be consistent with input data, nfor and obs_pd
-  nminin:             1380
-  nsecin:             0
+  ndayin:             0 # days requested in run. ndayin + nminin + nsecin should be consistent with length of input data, nfor and obs_pd
+  nminin:             1380 # hours requested in run. ndayin + nminin + nsecin should be consistent with length of input data, nfor and obs_pd
+  nsecin:             0 # seconds requested in run. ndayin + nminin + nsecin should be consistent with length of input data, nfor and obs_pd
   timestep:           900 # needs to be a factor of obs_pd
   ntrad1:             1 # first timestep in which radiation called
   zh:                 500.0 # height (above surface) of the top of boundary layer
@@ -68,14 +76,14 @@ RUNDATA:
   sice_alb:           0.8 # sea ice albedo
 #  land_alb:           = 0.5  # mean land albedo not needed if using tiles in JULES
   fland_ctile:        1.0  # fraction land # some logic, must = 0 for land_points=0, or between 0 and 1 for land_points=1 (fraction of land (either ice or soil) and sea)
-  tstar_sea:          275.150 # can be set from tstari - mean surface temperture
+  tstar_sea:          275.150 # can be set from tstari - mean surface temperature
   tstar_land:         275.150 # can be set from tstari
   tstar_sice:         275.150 # can be set from tstari
   albobs_sw:          0.125 # SW obs/clim albedo (SW)
   albobs_vis:         0.075 # SW obs/clim albedo (VIS)
   albobs_nir:         0.25 # SW obs/clim albedo (NIR)
 
-LOGIC:
+LOGIC: # used for choosing various model options
   ancyc:              true # default = true. Not sure why
   altdat:             true # use specified initial profiles of theta,q,u and v from INPROF
   land_sea_mask:      true # land point(1) or sea point(0)  must match land_points
@@ -95,13 +103,13 @@ LOGIC:
 #  prindump_day:       true
 #  grafdump_step:      true
 
-INJULES:
+INJULES: # JULES land surface scheme options (only required for land points)
   # fraction of each surface type (9 tiles)
   #1) Trees (broadleaf) 2) Trees (needleleaf) 3) Grass (temperate) 4) Grass (tropical) 5) Shrubs 6) Urban 7) Inland water 8) Bare soil 9) Ice
   frac_typ:    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0]
   # soil moisture
   smi_opt:      0 # 0 use smcli, 1 use fsmc, 2 use sth
-  smcli:      [0.0, 0.0, 0.0, 0.0] # initial soil moisture (kg/m3) on same layers as t_deep_soili
+  smcli:      [0.0, 0.0, 0.0, 0.0] # initial soil moisture (kg/m3) on same layers as t_deep_soili. number of soil levels set by st_levels in UM namelist file SIZES (set in ROSES)
   # vegetation parameters for vegetation tiles (5)
   canht:       [0.0, 0.0, 0.0, 0.0,0.0]  # required. 1.5 gives us z0m = 0.15 for grass
   lai:         [2.0, 2.0, 2.0, 2.0, 2.0]
@@ -115,11 +123,11 @@ INJULES:
   snow_tile:   [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] # lying snow on tiles (kg/m^3)
   rgrain:      [50.0, 50.0, 50.0, 50.0, 50.0, 50.0, 50.0, 50.0, 50.0] # snow grain size (micro m) default 50
 
-INGWD:
+INGWD: # gravity wave drag options
 
-INPROF:
+INPROF: # initial profile options
 # get profiles of theta, qi, p_in, ui, vi from files. wi and w_advi set to 0
-  kill_interp:    true # input data already on model levels.
+  kill_interp:    true # input data is already on model levels
   z0mseai:        1.0e-4 # initial sea surface roughness length (required if LOGIC:l_spec_z0 = true)
   u_0:            0.0 # sea surface currents
   v_0:            0.0 # sea surface currents
@@ -129,17 +137,18 @@ INPROF:
   i_snowdepth:    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      # JULES lnd*tiles. if this specified, then need to add characteristic of each
   smci:           0.0 # initial soil moisture content
   canopy_gbi:     0.0 # initial canopy water content
-  t_deep_soili:   [275.15, 275.15, 275.15, 275.15] # initial deep soil temperature (one for each soil layer) - corresponds to smcli and/or sth
+  t_deep_soili:   [275.15, 275.15, 275.15, 275.15] # initial deep soil temperature (one for each soil layer) - corresponds to smcli and/or sth. number of soil levels set by st_levels in UM namelist file SIZES (set in ROSES)
   sil_orog_land:  0.0 # unresolved orography (land points only)
   ho2r2_orog:     0.0 # unresolved orography (land points only)
 
-INGEOFOR:
+INGEOFOR: # geostrophic forcing options
 
-INPHYSWITCH:
+PHYSWITCH: # physics switch options
+ conv_mode:   0 # convection scheme mode (default 0)
 
-INRADCLOUD: # do not use as currently disabled in SCM
+RADCLOUD: # do not use as currently disabled in SCM
 
-INOBSFOR:
+INOBSFOR: # observational forcing options
   obs_pd:    1800.0 # time period for observational forcing (s). should be consistent with input data, nfor and ndayin
   obs_bot:   0.0 # lower boundary to apply forcings (m) # should be consistent with
   obs_top:   85000.0 # upper boundary to apply forcings (m)
@@ -167,7 +176,7 @@ INOBSFOR:
   plev_w:    1.0e+10
 
 
-DIAGS:
+DIAGS:   # diagnositc output options
  strm_format(1):      4 # 4 = netCDF, 3 = text
  strm_unit(1):        -1 # -1 for netCDF, 37 for text
  strm_dumpstep:       +1 # +ve = dumping period of x timesteps, -ve = dumping period around x seconds, 0 = dumping period whole run.
@@ -185,4 +194,4 @@ DIAGS:
  l_SCMDiag_sea:    false # should be set by land_point
  l_SCMDiag_land:   true # should be set by land_point
 
-PHYSWITCH:
+
