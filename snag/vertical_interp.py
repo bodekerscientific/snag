@@ -133,7 +133,7 @@ def calc_tendencies(obs_array, obs_dt_array):
     tendencies are in units per day
     :param obs_array: array of input data with dimensions (time,level). Assumes the first data point is also the start time.
     :param obs_dt_array: array of datetimes corresponding to time dimension of scm_inp_array
-    :return: tend_out: array of tendencies calculated for every observation input time except the inital time.
+    :return: tend_out: array of tendencies calculated for every observation input time including the initial time.
     """
 
     # calculate gradient excluding the inital point
@@ -143,4 +143,4 @@ def calc_tendencies(obs_array, obs_dt_array):
     tstep_per_day = 86400.0 / (obs_dt_array[1] - obs_dt_array[0]).total_seconds()
     tend_per_day = tend * tstep_per_day
 
-    return tend_per_day[1:,:]
+    return tend_per_day[:,:]

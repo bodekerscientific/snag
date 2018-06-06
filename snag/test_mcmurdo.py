@@ -14,7 +14,7 @@ from logging import basicConfig
 basicConfig()
 
 
-conf = r'D:\code-GitHub\snag\examples\mcmurdo_land.yml'
+conf = 'D:/code-GitHub/snag/examples/mcmurdo_land.yml'
 
 if isinstance(conf, string_types):
     conf = yaml.load(open(conf))
@@ -33,7 +33,7 @@ try:
 except:
     pass
 
-dump(nl.as_dict(),stream=open('namelist_L85_ARM_MCMURDO_test_land9.scm','w'))
+dump(nl.as_dict(),stream=open('P:/Projects/DSC-SCM/SNAG/namelist_L85_ARM_MCMURDO_test_land10.scm','w'))
 
 # plot
 

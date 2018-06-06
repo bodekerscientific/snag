@@ -69,9 +69,9 @@ class ObservationalForcing(BaseForcing):
 
         # Write out the background states
         for v in ('t', 'q', 'u', 'v', 'w'):
-            conf['INOBSFOR']['{}_bg'.format(v)] = variables[v].data[1:]
+            conf['INOBSFOR']['{}_bg'.format(v)] = variables[v].data[:] # includes initial state
 
-        #TODO: handle surfaces
+        # TODO: handle surfaces
 
         return conf
 

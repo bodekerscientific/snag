@@ -110,7 +110,7 @@ class Namelist(object):
 
     def _set_dt_config(self, conf):
         start_dt, end_dt = self.variables['p'].datetime_span()
-        nforcings = len(self.variables['p'].data) - 1
+        nforcings = len(self.variables['p'].data) # includes initial time
 
         # Loop over the various date/time variables and check if they have been set correctly
         for v, attr in (('year_init', 'year'), ('month_init', 'month'), ('day_init', 'day'), ('hour_init', 'hour'), ('min_init', 'minute'),

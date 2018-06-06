@@ -41,7 +41,7 @@ CNTLSCM: # SCM top level control
  l_ts_log:            true # report model progress
  model_levels_nml:    85 # the number of levels in forcing grid - must match model_levels in UM namelist file SIZES (set in ROSES)
  land_points:         1 # land point(1) or sea(0). for 1, land_sea_mask must be set to true, and for 0 land_sea_mask=false
- nfor:                47 # number of observations in obs forcing. should be consistent with length of input data, ndayin + nminin + nsecin and obs_pd. obs forcing includes initial timestep
+ nfor:                48 # number of observations in obs forcing. should be consistent with length of input data, ndayin + nminin + nsecin should equal  (nfor-1)*obs_pd. obs forcing includes initial timestep
 
 INDATA: # time and spatial dimension control
   year_init:          2016 # check for consistency with forcing input data
@@ -59,9 +59,9 @@ INDATA: # time and spatial dimension control
 RUNDATA: # various model options
   exname_in:          'ARM_MCMURDO' # it appears this is needed, though not sure for what
   exname_out:         'ARM_MCMURDO'
-  ndayin:             0 # days requested in run. ndayin + nminin + nsecin should be consistent with length of input data, nfor and obs_pd
-  nminin:             1380 # hours requested in run. ndayin + nminin + nsecin should be consistent with length of input data, nfor and obs_pd
-  nsecin:             0 # seconds requested in run. ndayin + nminin + nsecin should be consistent with length of input data, nfor and obs_pd
+  ndayin:             0 # days requested in run. ndayin + nminin + nsecin should be consistent with (length of input data - 1) * obs_pd and (nfor -1)*obs_pd
+  nminin:             1410 # hours requested in run. ndayin + nminin + nsecin should be consistent with (length of input data - 1) * obs_pd and (nfor -1)*obs_pd
+  nsecin:             0 # seconds requested in run. ndayin + nminin + nsecin should be consistent with (length of input data - 1) * obs_pd and (nfor -1)*obs_pd
   timestep:           900 # needs to be a factor of obs_pd
   ntrad1:             1 # first timestep in which radiation called
   zh:                 500.0 # height (above surface) of the top of boundary layer
