@@ -48,9 +48,11 @@ Note that tendencies (_inc) are given in units per day, so look quite large.
 
 For land points:
 
-Specifiy initial temperatures (in &INPROF) as well as soil moisture through either smcli or sth (&INJULES). the number of (deep) soil layers is set in ROSES using variable st_levels.
+Specify initial temperatures (in &INPROF) as well as soil moisture through either smcli or sth (&INJULES). the number of (deep) soil layers is set in ROSES using variable st_levels.
 
 Take care with scientific notation for numbers: 1.0e-4 will be interpreted as a number, but 1e-4 will incorrectly display as a string in the resulting namelist.
 This will break the build and show up as an "input conversion error" in the Rose error log
 
 List arrays [1.5, 1.3, 1.2]
+
+Radiation timesteps are set in the UM namelists run_radiation:i_lw_radstep_perday_prog and run_radiation:i_sw_radstep_perday_prog

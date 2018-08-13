@@ -167,3 +167,30 @@ def to_np(arr):
 
 def calc_potential_temp(temp, press):
     return temp * np.power(1000.0 / press, 0.286)
+
+
+def make_regular_timeseries(start_dt, stop_dt, num_secs):
+    """
+    makes a regular timeseries between two points. The difference between the start and end points must be a multiple of the num_secs
+    :param start_dt: first datetime required
+    :param stop_dt: last datetime required
+    :param num_secs: number of seconds in timestep required
+    :return: list of datetime objects between
+    """
+    epoch = datetime.utcfromtimestamp(0)
+    st = (start_dt - epoch).total_seconds()
+    et = (stop_dt - epoch).total_seconds()
+    new_timestamp = np.linspace(st, et, int((et - st) / num_secs + 1))
+
+    return convert_unix_time_seconds_to_dt(new_timestamp)
+
+
+def convert_unix_time_seconds_to_dt(uts_list):
+    """ converts list of timestamps of seconds since the start of unix time to datetime objects
+    :param uts_list: a list of times in seconds since the start of unix time
+    :return: dt_list: list of datetime objects
+    """
+    dt_list = []
+    for i in range(len(uts_list)):
+        dt_list.append(datetime.utcfromtimestamp(uts_list[i]))
+    return dt_list

@@ -10,7 +10,8 @@ meta:
   owner: Jono Conway <jono@bodekerscientific.com>
 
 data:
-  filename: P:/Projects/DSC-SCM/sonde data/Blended_ARM_data_jan24_30min.nc # path to netCDF containing boundary condition data
+
+  filename: Y:/DSC-SCM/SCM_INPUT/Blended_ARM_data_20160101_30min.nc # path to netCDF containing boundary condition data
 
   p:
     variable: pres # variable name in netCDF
@@ -44,12 +45,12 @@ CNTLSCM: # SCM top level control
  nfor:                48 # number of observations in obs forcing. should be consistent with length of input data, ndayin + nminin + nsecin should equal  (nfor-1)*obs_pd. obs forcing includes initial timestep
 
 INDATA: # time and spatial dimension control
-  year_init:          2016 # check for consistency with forcing input data
-  month_init:         1 # check for consistency with forcing input data
-  day_init:           24 # check for consistency with forcing input data
-  hour_init:          0 # check for consistency with forcing input data
-  min_init:           0 # check for consistency with forcing input data
-  sec_init:           30 # check for consistency with forcing input data
+  year_init:          2016 # OVERRIDDEN BY INPUT DATA but checked for consistency with forcing input data
+  month_init:         1 # OVERRIDDEN BY INPUT DATA but checked for consistency with forcing input data
+  day_init:           24 # OVERRIDDEN BY INPUT DATA but checked for consistency with forcing input data
+  hour_init:          0 # OVERRIDDEN BY INPUT DATA but checked for consistency with forcing input data
+  min_init:           0 # OVERRIDDEN BY INPUT DATA but checked for consistency with forcing input data
+  sec_init:           30 # OVERRIDDEN BY INPUT DATA but checked for consistency with forcing input data
   salt_dim3:          85 # not sure why the third sea salt aerosol dimension is 85, but it is the same in TOGACOARE and GABLS3
   lat:                -77.85 # from ARM griddedsonde dataset
   long:               166.66 # from ARM griddedsonde dataset
@@ -77,7 +78,7 @@ RUNDATA: # various model options
 #  land_alb:           = 0.5  # mean land albedo not needed if using tiles in JULES
   fland_ctile:        1.0  # fraction land # some logic, must = 0 for land_points=0, or between 0 and 1 for land_points=1 (fraction of land (either ice or soil) and sea)
   tstar_sea:          275.150 # can be set from tstari - mean surface temperature
-  tstar_land:         275.150 # can be set from tstari
+  tstar_land:         265.150 # can be set from tstari
   tstar_sice:         275.150 # can be set from tstari
   albobs_sw:          0.125 # SW obs/clim albedo (SW)
   albobs_vis:         0.075 # SW obs/clim albedo (VIS)
@@ -116,7 +117,7 @@ INJULES: # JULES land surface scheme options (only required for land points)
   gs:          1.0 # stomatal conductance (single value) (GABLS3 = 0.0161874815822)
   # other surface parameters for all tiles (9)
   z0_tile:     [0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.015, 0.15] # tile roughness length (m). this is ignored and overwritten by JULES for veg types
-  tstar_tile:  [275.15, 275.15, 275.15, 275.15, 275.15, 275.15, 275.15, 275.15, 275.15] ## initial surface temperature of tiles initialised to tstari if not set
+  tstar_tile:  [265.15, 265.15, 265.15, 265.15, 265.15, 265.15, 265.15, 265.15, 265.15] ## initial surface temperature of tiles initialised to tstari if not set
   catch:       [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] # required for land case. surface/canopy water capacity (snow-free land tiles) (GABLS3 = 1.13)
   canopy:      [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] # surface/canopy water (snow-free land tiles)
   infil_tile:  [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 8.25e-3, 0.0] # maximum surface infiltration (GABLS3 = 8.25e-3)
@@ -133,11 +134,11 @@ INPROF: # initial profile options
   v_0:            0.0 # sea surface currents
   ice_fract:      0.0 # grid-box sea-ice fraction
   di:             0.0 # initial equivalent sea-ice thickness
-  tstari:         275.15 # initial surface temperature (get from surface temperature forcing)
+  tstari:         265.15 # initial surface temperature (get from surface temperature forcing)
   i_snowdepth:    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      # JULES lnd*tiles. if this specified, then need to add characteristic of each
   smci:           0.0 # initial soil moisture content
   canopy_gbi:     0.0 # initial canopy water content
-  t_deep_soili:   [275.15, 275.15, 275.15, 275.15] # initial deep soil temperature (one for each soil layer) - corresponds to smcli and/or sth. number of soil levels set by st_levels in UM namelist file SIZES (set in ROSES)
+  t_deep_soili:   [265.15, 265.15, 265.15, 265.15] # initial deep soil temperature (one for each soil layer) - corresponds to smcli and/or sth. number of soil levels set by st_levels in UM namelist file SIZES (set in ROSES)
   sil_orog_land:  0.0 # unresolved orography (land points only)
   ho2r2_orog:     0.0 # unresolved orography (land points only)
 
@@ -157,11 +158,11 @@ INOBSFOR: # observational forcing options
   old_rlx:   false # pre-UM7.7 version of forcing relaxation (unsupported)
   l_vertadv: true # pre-UM7.7 version of horizontal-advective forcing (revealed forcing)(unsupported)
 
-  rlx_t:     0      # default 0 = no relaxation
-  rlx_q:     0      # default 0 = no relaxation
+  rlx_t:     2      # default 0 = no relaxation
+  rlx_q:     2      # default 0 = no relaxation
   rlx_u:     2      # default 2 = relax to observed large-scale profile over tau_u
   rlx_v:     2      # default 2 = relax to observed large-scale profile over tau_u
-  rlx_w:     4      # default 4 = relax to observed large-scale profile over timestep
+  rlx_w:     0      # default 4 = relax to observed large-scale profile over timestep
 
   tau_t:     3600.0 # timescale for relaxation (s; default 3600.0)
   tau_q:     3600.0 # timescale for relaxation (s; default 3600.0)
