@@ -80,7 +80,7 @@ def validate_number_soil_layers(config):
 
 
 def validate_length_of_simulation(config):
-    forcing_length_s = config['INOBSFOR']['obs_pd'] *  (config['CNTLSCM']['nfor'] - 1)
+    forcing_length_s = config['INOBSFOR']['obs_pd'] * (config['CNTLSCM']['nfor'] - 1)
     requested_length_s = config['RUNDATA']['ndayin'] * 86400 + config['RUNDATA']['nminin'] * 60 + config['RUNDATA']['nsecin']
     if int(forcing_length_s) != int(requested_length_s):
         return ['stated length of forcing data (INOBSFOR:obs_pd * CNTLSCM:nfor - 1) does not match days requested in RUNDATA']
