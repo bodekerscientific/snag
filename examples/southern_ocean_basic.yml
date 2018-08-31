@@ -45,8 +45,8 @@ INDATA:
 #  soil_type:          3 # needed for land point. ice = 1 so match soil_mask and land_ice_mask??
 
 RUNDATA:
-  exname_in:          'STH_OCEAN' # it appears this is needed, though not sure for what
-  exname_out:         'STH_OCEAN'
+#  exname_in:          'STH_OCEAN' # it appears this is needed, though not sure for what
+#  exname_out:         'STH_OCEAN'
   ndayin:             14 # days requested in run. should be consistent with input data, nfor and obs_pd
   nminin:             1080
   nsecin:             0
