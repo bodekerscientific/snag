@@ -1,0 +1,166 @@
+---
+meta:
+  run_name: example_run_mcmurdo
+  owner: Jono Conway <jono@bodekerscientific.com>
+
+data:
+  filename: P:/Projects/DSC-SCM/sonde data/Blended_ARM_data_jan24_30min.nc
+  #awrinterpolatedsondeM1.c1.20160124.000030
+  p:
+    variable: pressure
+  t:
+    variable: air_temperature
+  q:
+    variable: specific_humidity
+  u:
+    variable: x_wind
+  v:
+    variable: y_wind
+  w:
+    variable: upward_wind_velocity
+  ozone:
+    variable: ozone_clim
+
+forcing:
+  obs:
+
+CNTLSCM:
+ l_netcdf_obs:        false # unsupported feature
+ l_ts_log:            true # report model progress
+ model_levels_nml:    85 # the number of levels in forcing grid - must match that in UM namelist file SIZES
+ land_points:         0 # land point(1) or sea(0). for 1, land_sea_mask must be set to true, and for 0 land_sea_mask=false
+ nfor:                47 # number of observations in obs forcing. should be consistent input data, ndayin and obs_pd. obs forcing includes initial timestep??
+
+INDATA:
+  year_init:          2016 # check for consistency with forcing input data
+  month_init:         1 # check for consistency with forcing input data
+  day_init:           24 # check for consistency with forcing input data
+  hour_init:          0 # check for consistency with forcing input data
+  min_init:           0 # check for consistency with forcing input data
+  sec_init:           30 # check for consistency with forcing input data
+  salt_dim3:          85 # not sure why the third sea salt aerosol dimension is 85, but it is the same in TOGACOARE and GABLS3
+  lat:                -60.625 #
+  long:               165.6375 #
+  gridbox_area:       1.0e+6 # default value
+#  soil_type:          3 # needed for land point. ice = 1 so match soil_mask and land_ice_mask??
+
+RUNDATA:
+  exname_in:          'STH_OCEAN' # it appears this is needed, though not sure for what
+  exname_out:         'STH_OCEAN'
+  ndayin:             14 # days requested in run. should be consistent with input data, nfor and obs_pd
+  nminin:             1080
+  nsecin:             0
+  timestep:           900 # needs to be a factor of obs_pd
+  ntrad1:             1 # first timestep in which radiation called
+  zh:                 500.0 # height (above surface) of the top of boundary layer
+  ntml:               0 # model level of top of surface mixed layer (both GABLS and TOGACOARE use 0)
+  min_trop_level:     0 # 0 = calculate min/max tropopause level from climatologies
+  max_trop_level:     0 # 0 = calculate min/max tropopause level from climatologies
+  co2start:           5.420e-4  # CO2 mixing ratio in kg/kg
+  co2end:             5.420e-4
+  dolr_rts:           0.0  # TOA - surface upward longwave radiation (not entirely sure what this is)
+  orog:               0.0 # orography height in m
+  albsoil:            0.23 # soil albedo
+  sice_alb:           0.8 # sea ice albedo
+#  land_alb:           = 0.5  # mean land albedo not needed if using tiles in JULES
+  fland_ctile:        0.0  # fraction land # some logic, must = 0 for land_points=0, or between 0 and 1 for land_points=1 (fraction of land (either ice or soil) and sea)
+  tstar_sea:          276.0 # can be set from tstari - mean surface temperture
+#  tstar_land:         275.150 # can be set from tstari
+  tstar_sice:         273.150 # can be set from tstari
+  albobs_sw:          0.125 # SW obs/clim albedo (SW)
+  albobs_vis:         0.075 # SW obs/clim albedo (VIS)
+  albobs_nir:         0.25 # SW obs/clim albedo (NIR)
+
+LOGIC:
+  ancyc:              true # default = true. Not sure why
+  altdat:             true # use specified initial profiles of theta,q,u and v from INPROF
+  land_sea_mask:      false # land point(1) or sea point(0)  must match land_points
+  land_ice_mask:      false # land ice point(1) or ice-free land point (0). mutually exclusive with soil_mask
+  soil_mask:          false # land point with soil (1) or non-soil land_point. mutually exclusive with soil_mask
+  obs:                true # use observational forcing for atmosphere
+  obs_surf:           false # use observational forcing for surface (either fluxes or surface temperature)
+# stats:              false
+# noforce:            false
+# geoforce:           false
+# geoinit:            false
+  l_qpos_for:         true  # check q input after large scale forcing
+  l_spec_z0:          true # use prescribed roughness lengths (from INPROF for ocean and INJULES for land.
+  test:               false # output deatiled sub-timestep diagnostics
+  local_time:         false # use local, rather than GMT for diagnostics
+#  prindump_step:      true # see dump_days in RUNDATA
+#  prindump_day:       true
+#  grafdump_step:      true
+
+#INJULES:
+
+INGWD:
+
+INPROF:
+# get profiles of theta, qi, p_in, ui, vi from files. wi and w_advi set to 0
+  kill_interp:    true # input data already on model levels.
+  z0mseai:        1.5e-4 # initial sea surface roughness length (required if LOGIC:l_spec_z0 = true)
+  u_0:            0.0 # sea surface currents
+  v_0:            0.0 # sea surface currents
+  ice_fract:      0.0 # grid-box sea-ice fraction
+  di:             0.0 # initial equivalent sea-ice thickness
+  tstari:         276.0 # initial surface temperature (get from surface temperature forcing)
+#  i_snowdepth:    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]      # JULES lnd*tiles. if this specified, then need to add characteristic of each
+#  smci:           0.0 # initial soil moisture content
+#  canopy_gbi:     0.0 # initial canopy water content
+#  t_deep_soili:   [275.15, 275.15, 275.15, 275.15] # initial deep soil temperature (one for each soil layer) - corresponds to smcli and/or sth
+#  sil_orog_land:  0.0 # unresolved orography (land points only)
+#  ho2r2_orog:     0.0 # unresolved orography (land points only)
+
+INGEOFOR:
+
+INPHYSWITCH:
+
+INRADCLOUD: # do not use as currently disabled in SCM
+
+INOBSFOR:
+  obs_pd:    21600.0 # time period for observational forcing (s). should be consistent with input data, nfor and ndayin
+  obs_bot:   0.0 # lower boundary to apply forcings (m) # should be consistent with
+  obs_top:   85000.0 # upper boundary to apply forcings (m)
+
+  old_nml:   false # set to false as SNAG automatically creates files with new format
+  old_rlx:   false # pre-UM7.7 version of forcing relaxation (unsupported)
+  l_vertadv: true # pre-UM7.7 version of horizontal-advective forcing (revealed forcing)(unsupported)
+
+  rlx_t:     2      # default 0 = no relaxation
+  rlx_q:     2      # default 0 = no relaxation
+  rlx_u:     2      # default 2 = relax to observed large-scale profile over tau_u
+  rlx_v:     2      # default 2 = relax to observed large-scale profile over tau_u
+  rlx_w:     2      # default 4 = relax to observed large-scale profile over timestep
+
+  tau_t:     3600.0 # timescale for relaxation (s; default 3600.0)
+  tau_q:     3600.0 # timescale for relaxation (s; default 3600.0)
+  tau_u:     3600.0 # timescale for relaxation (s; default 3600.0)
+  tau_v:     3600.0 # timescale for relaxation (s; default 3600.0)
+  tau_w:     3600.0 # timescale for relaxation (s; default 3600.0)
+
+  plev_t:    1.0e+10 # apply relaxation on all levels with pressure less than (default = 1.51e+5)
+  plev_q:    1.0e+10
+  plev_u:    1.0e+10
+  plev_v:    1.0e+10
+  plev_w:    1.0e+10
+
+
+DIAGS:
+ strm_format(1):      4 # 4 = netCDF, 3 = text
+ strm_unit(1):        -1 # -1 for netCDF, 37 for text
+ strm_dumpstep:       +1 # +ve = dumping period of x timesteps, -ve = dumping period around x seconds, 0 = dumping period whole run.
+ strm_rejectlist(1):  '' # variables to exclude from a given stream
+ l_SCMDiag_gen:    true
+ l_SCMDiag_conv:   true
+ l_SCMDiag_rad:    true
+ l_SCMDiag_bl:     true
+ l_SCMDiag_lsp:    true
+ l_SCMDiag_lscld:  true
+ l_SCMDiag_forc:   true
+ l_SCMDiag_incs:   true
+ l_SCMDiag_pc2:    true
+ l_SCMDiag_surf:   true
+ l_SCMDiag_sea:    true # should be set by land_point
+ l_SCMDiag_land:   false # should be set by land_point
+
+PHYSWITCH:

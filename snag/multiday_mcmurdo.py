@@ -17,7 +17,7 @@ basicConfig()
 num_days = 6  # number of days in input file
 out_dt = 1800  # timestep (s) of input data
 
-datetime_list = make_regular_timeseries(dt.datetime(2016, 1, 1), dt.datetime(2016, 1, 16), 86400)
+datetime_list = make_regular_timeseries(dt.datetime(2016, 1, 1), dt.datetime(2016, 1, 15), 86400)
 
 for ii, i in enumerate(range(0,len(datetime_list),num_days-1)):
     dt1 = datetime_list[i]
