@@ -2,6 +2,7 @@ SNAG
 ====
 
 The Single column model Namelist Auto Generator
+-----------------------------------------------
 
 This package is designed to enable users of the UM Single Column Model (SCM) to be able to create and modify the namelist file required by the SCM in a Pythonic way.
 
@@ -9,7 +10,7 @@ It is currently only set up for observational forcing cases only.
 
 
 Installation
-============
+------------
 
 Install the latest version of the package downloading or cloning the code from git (https://github.com/bodekerscientific/snag) and running setup.py
 
