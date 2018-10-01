@@ -64,7 +64,7 @@ for ii, i in enumerate(range(0, len(datetime_list), num_days - 1)):
         pass
 
     # dump(nl.as_dict(), stream=open('P:/Projects/DSC-SCM/SNAG/namelist_ARM_MCMURDO_land_{}{:02}{:02}_30min.scm'.format(dt1.year, dt1.month, dt1.day), 'w'))
-    dump(nl.as_dict(), stream=open('P:/Projects/DSC-SCM/SNAG/ensemble_namelists/group05/namelist_STH_OCEAN_{:02}.scm'.format(ii), 'w'))
+    dump(nl.config(), stream=open('P:/Projects/DSC-SCM/SNAG/ensemble_namelists/group05/namelist_STH_OCEAN_{:02}.scm'.format(ii), 'w'))
 # plot
 
 # import matplotlib.pylab as plt

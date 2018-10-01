@@ -38,14 +38,16 @@ for i, dt1 in enumerate(datetime_list):
     nl.config['INOBSFOR']['w_inc'][:] = 0
     nl.config['INOBSFOR']['w_bg'][:] = 0
 
-    # try validate it first (also validates on dump)
+    # try validate it first
     try:
         nl.validate()
     except:
         pass
 
     # dump(nl.as_dict(), stream=open('P:/Projects/DSC-SCM/SNAG/namelist_ARM_MCMURDO_land_{}{:02}{:02}_30min.scm'.format(dt1.year, dt1.month, dt1.day), 'w'))
-    dump(nl.as_dict(), stream=open('P:/Projects/DSC-SCM/SNAG/ensemble_namelists/group02/namelist_ARM_MCMURDO_land_{:02}.scm'.format(i), 'w'))
+    # send directly to dump as already validated - needs to send config
+    dump(nl.config(), stream=open('P:/Projects/DSC-SCM/SNAG/ensemble_namelists/test/namelist_ARM_MCMURDO_land_{:02}.scm'.format(i), 'w'))
+
 # plot
 
 # import matplotlib.pylab as plt
