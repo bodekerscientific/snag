@@ -112,7 +112,7 @@ def extract_vars(nc_file, var_name, time_idx=None, target_units=None, time_varia
 
     coords = OrderedDict()
 
-    if dimnames[0] == time_variable:  # TODO needs to work around this step for ozone climatology
+    if dimnames[0] == time_variable:  # TODO needs to work around this step for ozone climatology  as currently time is just integers 1-12
         t = extract_times(nc_file, time_idx, time_variable)
         if not multitime:
             t = [t]

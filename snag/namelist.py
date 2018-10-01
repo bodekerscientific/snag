@@ -54,7 +54,7 @@ class Namelist(object):
     def __init__(self, conf):
         """
         Initialise the NamelistConf with configuration
-        :param conf: A dict-like object containing the
+        :param conf: A dict-like object containing the paths to the input data and model configuration parameters
         """
         self._raw_conf = conf
         self.variables = {}
@@ -157,7 +157,7 @@ class Namelist(object):
             for k in forcing_conf:
                 snag_config[k].update(forcing_conf[k])
 
-        snag_config['RUNDATA']['ozone'] = self.variables['ozone'].initial_profile()
+        snag_config['RUNDATA']['ozone'] = self.variables['ozone'].initial_profile() # TODO needs to select timestep based on month
 
         # Override with explicitly set params
         for k in DEFAULT_NAMELIST_SECTIONS:

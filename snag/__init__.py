@@ -17,5 +17,7 @@ def create_namelist(conf, stream=None):
     if isinstance(conf, string_types):
         conf = yaml.load(open(conf))
 
+    # create a namelist object and initialise the variables including the tendencies
     nl = Namelist(conf)
+    # validate and dump
     return nl.dump(stream)

@@ -29,8 +29,8 @@ for i, dt1 in enumerate(datetime_list):
     conf['INDATA']['month_init'] = int(dt1.month)
     conf['INDATA']['day_init'] = int(dt1.day)
 
+    # create a namelist object and initialise the variables including the tendencies
     nl = Namelist(conf)
-    #nl.variables['w'][:] = 0
 
     # set all vertical fluxes to 0 for test case
     nl.config['INPROF']['wi'][:] = 0
@@ -38,6 +38,7 @@ for i, dt1 in enumerate(datetime_list):
     nl.config['INOBSFOR']['w_inc'][:] = 0
     nl.config['INOBSFOR']['w_bg'][:] = 0
 
+    # try validate it first (also validates on dump)
     try:
         nl.validate()
     except:
