@@ -76,32 +76,32 @@ class ObservationalForcing(BaseForcing):
         return conf
 
 
-class RevealedForcing(BaseForcing):
-    def get_params(self, variables):
-        return {
-            'LOGIC': {
-                'l_vertadv': True
-            }
-        }
-
-RELAXATION_DISABLED = 0
-RELAXATION_INITIAL_TAU = 0
-RELAXATION_BG_TAU = 0
-RELAXATION_INITIAL = 0
-RELAXATION_BG = 0
-
-
-class RelaxationForcing(BaseForcing):
-
-    def get_params(self, variables):
-        return {
-            ''
-        }
+# class RevealedForcing(BaseForcing):
+#     def get_params(self, variables):
+#         return {
+#             'LOGIC': {
+#                 'l_vertadv': True
+#             }
+#         }
+#
+# RELAXATION_DISABLED = 0
+# RELAXATION_INITIAL_TAU = 0
+# RELAXATION_BG_TAU = 0
+# RELAXATION_INITIAL = 0
+# RELAXATION_BG = 0
+#
+#
+# class RelaxationForcing(BaseForcing):
+#
+#     def get_params(self, variables):
+#         return {
+#             ''
+#         }
 
 
 forcings = {
-    'stat': StatisticalForcing,
     'obs': ObservationalForcing,
-    'revealed': RevealedForcing,
-    'relaxation': RelaxationForcing,
+    # 'stat': StatisticalForcing,
+    # 'revealed': RevealedForcing,
+    # 'relaxation': RelaxationForcing,
 }
