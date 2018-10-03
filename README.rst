@@ -53,7 +53,7 @@ Required variables for atmospheric boundary conditions
 - specific humidity
 - u + v winds
 - w winds + vertical movement due to horizontal advection
-- ozone
+- ozone - takes single profile from the first timestep
 
 
 NOTES
